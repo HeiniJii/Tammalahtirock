@@ -7,103 +7,46 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #121212;
-            color: #ffffff;
+            margin: 0; padding: 0;
+            background-color: #121212; color: #ffffff;
         }
         header {
-            background-color: #1f1f1f;
-            padding: 20px;
-            text-align: center;
+            background-color: #1f1f1f; padding: 20px; text-align: center;
             border-bottom: 2px solid #ff007f;
         }
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #2a2a2a;
-            overflow-x: auto;
-        }
+        nav { display: flex; justify-content: center; background-color: #2a2a2a; overflow-x: auto; }
         nav button {
-            background: none;
-            border: none;
-            color: #fff;
-            padding: 15px 20px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-            white-space: nowrap;
+            background: none; border: none; color: #fff; padding: 15px 20px;
+            cursor: pointer; font-size: 16px; transition: 0.3s; white-space: nowrap;
         }
-        nav button:hover, nav button.active {
-            background-color: #ff007f;
-            color: white;
-        }
-        .container {
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-            padding-bottom: 100px; /* Tilaa testipaneelille */
-        }
-        .page {
-            display: none;
-        }
-        .page.active {
-            display: block;
-        }
+        nav button:hover, nav button.active { background-color: #ff007f; color: white; }
+        .container { padding: 20px; max-width: 800px; margin: auto; padding-bottom: 50px; }
+        .page { display: none; }
+        .page.active { display: block; }
         .card {
-            background-color: #1e1e1e;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border-left: 5px solid #00f0ff;
+            background-color: #1e1e1e; padding: 20px; margin-bottom: 15px;
+            border-radius: 8px; border-left: 5px solid #00f0ff;
         }
-        .news-flash {
-            border-left-color: #ffcc00;
-        }
+        .news-flash { border-left-color: #ffcc00; }
         .pass {
             background: linear-gradient(45deg, #ff007f, #7928ca);
-            padding: 30px;
-            text-align: center;
-            border-radius: 15px;
+            padding: 30px; text-align: center; border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
+        .pass h3 { margin: 0; font-size: 14px; letter-spacing: 2px; opacity: 0.8; }
+        .festival-name { font-size: 26px; font-weight: bold; margin: 15px 0; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;
         }
-        .gallery img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-            background-color: #333;
+        .gallery-item { position: relative; height: 150px; border-radius: 8px; overflow: hidden; background-color: #333; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-item .author-tag {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.7); color: #fff; font-size: 10px;
+            padding: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        /* Testipaneelin tyylit */
-        .admin-panel {
-            background-color: #222;
-            border-top: 3px dashed #ffcc00;
-            padding: 15px;
-            margin-top: 40px;
-            border-radius: 8px;
-        }
-        .admin-panel input, .admin-panel textarea, .admin-panel button {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            border: 1px solid #444;
-            background-color: #333;
-            color: white;
-            box-sizing: border-box;
-        }
-        .admin-panel button {
-            background-color: #28a745;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .admin-panel button:hover {
-            background-color: #218838;
+        .my-stamps {
+            margin-top: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; text-align: left;
         }
     </style>
 </head>
@@ -119,76 +62,68 @@
     <button onclick="showPage('kartta')" id="btn-kartta">Aluekartta</button>
     <button onclick="showPage('ohjelma')" id="btn-ohjelma">Ohjelma</button>
     <button onclick="showPage('passi')" id="btn-passi">Festaripassi</button>
-    <button onclick="showPage('galleria')" id="btn-galleria">Kuvat</button>
+    <button onclick="showPage('galleria')" id="btn-galleria">Yhteiset Kuvat</button>
 </nav>
 
 <div class="container">
 
+    <!-- ETUSIVU & UUTISET -->
     <div id="koti" class="page active">
         <h2>Live-uutiset & Bannerit</h2>
-        <div id="news-container">
-            <p>Yhdistetään Tammalahtirockin tietokantaan...</p>
-        </div>
+        <div id="news-container"><p>Yhdistetään tietokantaan...</p></div>
     </div>
 
+    <!-- ALUEKARTTA -->
     <div id="kartta" class="page">
         <h2>Aluekartta</h2>
         <div class="card">
             <p>🗺️ [Tähän tulee myöhemmin festarialueen kartta]</p>
-            <div style="width: 100%; height: 300px; background: #333; display:flex; align-items:center; justify-content:center;">
-                [ Aluekartta placeholder ]
-            </div>
+            <div style="width: 100%; height: 300px; background: #333; display:flex; align-items:center; justify-content:center;">[ Kartta ]</div>
         </div>
     </div>
 
+    <!-- OHJELMA -->
     <div id="ohjelma" class="page">
         <h2>Festivaaliohjelma</h2>
         <div class="card"><h3>18:00 - Portit auki & Alkulämmöt</h3><p>Päälava</p></div>
         <div class="card"><h3>20:00 - Mysteeriartisti X</h3><p>Telttalava</p></div>
-        <div class="card"><h3>22:30 - Pääesiintyjä</h3><p>Päälava</p></div>
     </div>
 
+    <!-- DIGITAALINEN PASSI -->
     <div id="passi" class="page">
         <h2>Digitaalinen Festaripassi</h2>
         <div class="pass">
-            <h3>TAMMALAHTIROCK VIP 2026</h3>
-            <p>Käyttäjä: Rock-Kansalainen #1337</p>
-            <div style="background: white; padding: 10px; display: inline-block; margin-top: 10px;">
-                <span style="color: black; font-weight: bold;">[ QR-KOODI AKTIIVINEN ]</span>
+            <h3>TAMMALAHTIROCK 2026 • VIP</h3>
+            <div class="festival-name" id="festival-name-display">Ladataan nimeä...</div>
+            <div style="background: white; padding: 10px; display: inline-block; margin-top: 5px; border-radius: 5px;">
+                <span style="color: black; font-weight: bold; font-size: 12px;">[ QR-KOODI AKTIIVINEN ]</span>
+            </div>
+            
+            <div class="my-stamps">
+                <h4 style="margin: 0 0 5px 0;">📸 Minun kuvamuistoni</h4>
+                <p style="font-size: 12px; margin: 0 0 10px 0; opacity: 0.8;">Skannaa alueen QR-koodi puhelimellasi niin ottamasi kuvat ilmestyvät tähän.</p>
+                <div class="gallery" id="my-photo-gallery">
+                    <p>Ei vielä omia passikuvia.</p>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- VALOKUVAGALLERIA -->
     <div id="galleria" class="page">
-        <h2>Kojun valokuvat</h2>
-        <p>Valokuvakojulla otetut hassut otokset ilmestyvät tänne reaaliajassa.</p>
+        <h2>Kaikkien yhteinen kuvaseinä</h2>
+        <p>Festarikansan parhaat otokset livenä.</p>
         <div class="gallery" id="photo-gallery">
-            <p>Odotellaan ensimmäisiä kuvia kojulta...</p>
+            <p>Odotellaan kuvia...</p>
         </div>
-    </div>
-
-    <div class="admin-panel">
-        <h3>⚙️ Testityökalut (Simuloi valokuvakojua ja uutisia)</h3>
-        <p style="font-size:12px; color:#aaa;">Tämä osio näkyy vain kehitysvaiheessa. Voit testata tästä toimiiko Firebase-yhteytesi.</p>
-        
-        <hr style="border-color:#444;">
-        
-        <h4>Luo feikkiuutinen livenä:</h4>
-        <input type="text" id="test-title" placeholder="Uutisen otsikko (esim. Apua!)">
-        <textarea id="test-text" placeholder="Uutisteksti..."></textarea>
-        <button onclick="sendTestNews()">Lähetä live-uutinen</button>
-        
-        <h4 style="margin-top:15px;">Simuloi valokuvakojun kuvaa:</h4>
-        <button onclick="sendTestPhoto()">Lähetä satunnainen testikuva galleriaan</button>
     </div>
 
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Tammalahtirock 2026 konfiguraatio
     const firebaseConfig = {
         apiKey: "AIzaSyCBt38gSC3HTSqYb4OVTK6-LZz7Vi8r8Mg",
         authDomain: "tammalahtirock2.firebaseapp.com",
@@ -198,11 +133,28 @@
         appId: "1:376885311923:web:c7f0215004703e5676f3c6"
     };
 
-    // Alustetaan Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Välilehtien vaihto navigaatiossa
+    // NIMIGENERAATTORI
+    const etuliitteet = ["DJ", "Kapteeni", "Kuningas", "Lady", "Herra", "Tohtori", "Iso", "Pikku", "Ylipäällikkö", "Metsän"];
+    const keskiosat = ["Glitter", "Crocs", "Tölkki", "Sauna", "Makkara", "Disco", "Hyttynen", "Nuotio", "Basso", "Kimallus"];
+    const loput = ["Keisari", "Noita", "Ninja", "Mestari", "Ruhtinas", "Velho", "Kulkija", "Sankari", "Tietäjä", "Tuhooja"];
+
+    function arvoFestariNimi() {
+        const e = etuliitteet[Math.floor(Math.random() * etuliitteet.length)];
+        const k = keskiosat[Math.floor(Math.random() * keskiosat.length)];
+        const l = loput[Math.floor(Math.random() * loput.length)];
+        return `${e} ${k} ${l}`;
+    }
+
+    // Luodaan tai haetaan festarinimi laitteen muistista
+    if (!localStorage.getItem('festariNimiID')) {
+        localStorage.setItem('festariNimiID', arvoFestariNimi());
+    }
+    const myFestariNimi = localStorage.getItem('festariNimiID');
+    document.getElementById('festival-name-display').innerText = myFestariNimi;
+
     window.showPage = function(pageId) {
         const pages = document.querySelectorAll('.page');
         const buttons = document.querySelectorAll('nav button');
@@ -212,85 +164,64 @@
         document.getElementById('btn-' + pageId).classList.add('active');
     }
 
-    // 1. REAALIAIKAISET UUTISET (Kuuntelu)
+    // Live-uutiset
     const newsContainer = document.getElementById('news-container');
-    const newsQuery = query(collection(db, "uutiset"), orderBy("aika", "desc"));
-
-    onSnapshot(newsQuery, (snapshot) => {
+    onSnapshot(query(collection(db, "uutiset"), orderBy("aika", "desc")), (snapshot) => {
         newsContainer.innerHTML = "";
-        if (snapshot.empty) {
-            newsContainer.innerHTML = "<p>Kaikki rauhallista Tammalahdessa. Ei uutisia juuri nyt...</p>";
-            return;
-        }
+        if (snapshot.empty) { newsContainer.innerHTML = "<p>Ei uutisia juuri nyt.</p>"; return; }
         snapshot.forEach((doc) => {
             const data = doc.data();
-            const newsCard = document.createElement('div');
-            newsCard.className = 'card news-flash';
-            newsCard.innerHTML = `<h3>${data.otsikko || '🚨 Ilmoitus'}</h3><p>${data.teksti || ''}</p>`;
-            newsContainer.appendChild(newsCard);
+            const card = document.createElement('div');
+            card.className = 'card news-flash';
+            card.innerHTML = `<h3>${data.otsikko || '🚨'}</h3><p>${data.teksti || ''}</p>`;
+            newsContainer.appendChild(card);
         });
-    }, (error) => {
-        console.error("Virhe ladattaessa uutisia: ", error);
-        newsContainer.innerHTML = "<p style='color:red;'>Virhe ladattaessa uutisia. Tarkista Firebasen säännöt (Test Mode)!</p>";
     });
 
-    // 2. REAALIAIKAINEN KUVAGALLERIA (Kuuntelu)
+    // Kuvat-seuranta
     const galleryContainer = document.getElementById('photo-gallery');
-    const photosQuery = query(collection(db, "kuvat"), orderBy("aika", "desc"));
+    const myGalleryContainer = document.getElementById('my-photo-gallery');
 
-    onSnapshot(photosQuery, (snapshot) => {
+    onSnapshot(query(collection(db, "kuvat"), orderBy("aika", "desc")), (snapshot) => {
         galleryContainer.innerHTML = "";
-        if (snapshot.empty) {
-            galleryContainer.innerHTML = "<p>Galleria on vielä tyhjä. Ota ensimmäinen kuva kojulla!</p>";
-            return;
-        }
+        myGalleryContainer.innerHTML = "";
+        
+        let hasMyPhotos = false;
+
         snapshot.forEach((doc) => {
             const data = doc.data();
             if (data.kuva_url) {
+                // Luodaan kuva-elementti yhteiselle seinälle nimen kanssa
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                
                 const img = document.createElement('img');
                 img.src = data.kuva_url;
-                img.alt = "Kojukuva";
-                galleryContainer.appendChild(img);
+                
+                const tag = document.createElement('div');
+                tag.className = 'author-tag';
+                tag.innerText = data.tekija_nimi || "Tuntematon Rokkari";
+                
+                item.appendChild(img);
+                item.appendChild(tag);
+                galleryContainer.appendChild(item);
+
+                // Jos kuvan ottajan nimi täsmää tämän laitteen nimeen, se menee omaan passiinfoon
+                if (data.tekija_nimi === myFestariNimi) {
+                    hasMyPhotos = true;
+                    const myItem = document.createElement('div');
+                    myItem.className = 'gallery-item';
+                    const myImg = document.createElement('img');
+                    myImg.src = data.kuva_url;
+                    myItem.appendChild(myImg);
+                    myGalleryContainer.appendChild(myItem);
+                }
             }
         });
+
+        if (galleryContainer.innerHTML === "") galleryContainer.innerHTML = "<p>Ei vielä kuvia.</p>";
+        if (!hasMyPhotos) myGalleryContainer.innerHTML = "<p>Ei vielä omia passikuvia.</p>";
     });
-
-    // 3. ADMIN-TOIMINNOT TESTAAMISTA VARTEN
-    window.sendTestNews = async function() {
-        const otsikkoInput = document.getElementById('test-title');
-        const tekstiInput = document.getElementById('test-text');
-        
-        if(!otsikkoInput.value || !tekstiInput.value) {
-            alert("Täytä molemmat uutiskentät!");
-            return;
-        }
-
-        try {
-            await addDoc(collection(db, "uutiset"), {
-                otsikko: otsikkoInput.value,
-                teksti: tekstiInput.value,
-                aika: serverTimestamp()
-            });
-            otsikkoInput.value = "";
-            tekstiInput.value = "";
-        } catch (e) {
-            alert("Virhe uutisen lähetyksessä: " + e.message);
-        }
-    }
-
-    window.sendTestPhoto = async function() {
-        const randomId = Math.floor(Math.random() * 1000);
-        const testImageUrl = `https://picsum.photos/id/${randomId}/500/500`;
-
-        try {
-            await addDoc(collection(db, "kuvat"), {
-                kuva_url: testImageUrl,
-                aika: serverTimestamp()
-            });
-        } catch (e) {
-            alert("Virhe kuvan lähetyksessä: " + e.message);
-        }
-    }
 </script>
 </body>
 </html>
