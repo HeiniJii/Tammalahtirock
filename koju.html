@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tammalahtirock 2026 - Festarikamera</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a; color: white; text-align: center;
+            margin: 0; padding: 20px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; min-height: 100vh; box-sizing: border-box;
+        }
+        h1 { color: #ff007f; margin-bottom: 5px; }
+        .user-badge {
+            background: rgba(255, 0, 127, 0.2); border: 1px solid #ff007f;
+            padding: 5px 15px; border-radius: 20px; font-size: 14px; margin-bottom: 20px;
+        }
+        #camera-container {
+            position: relative; width: 100%; max-width: 400px; aspect-ratio: 1/1;
+            background: #000; border-radius: 15px; overflow: hidden; border: 4px solid #00f0ff;
+        }
+        video, canvas { width: 100%; height: 100%; object-fit: cover; }
+        canvas { display: none; }
+        .btn {
+            background: linear-gradient(45deg, #ff007f, #7928ca); color: white; border: none;
+            padding: 20px 40px; font-size: 22px; font-weight: bold; border-radius: 50px;
+            cursor: pointer; margin-top: 25px; width: 100%; max-width: 300px;
+        }
+        .btn:disabled { background: #555; cursor: not-allowed; }
+        #status { margin-top: 15px; color: #aaa; font-size: 16px; }
+        .flash {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; opacity: 0; pointer-events: none;
+        }
+        @keyframes flash-animation { 0% { opacity: 1; } 100% { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <h1>📸 FESTARIKAMERA</h1>
+    <div class="user-badge" id="user-badge-display">Kuvaajana: Latautuu...</div>
+
+    <div id="camera-container">
+        <video id="video" autoplay playsinline></video>
+        <canvas id="canvas" width="800" height="800"></canvas>
+        <div id="flash-effect" class="flash"></div>
+    </div>
+
+    <button id="snap-btn" class="btn" onclick="takeSnapshot()">RÄPSÄISE KUVA!</button>
+    <div id="status">Käynnistetään puhelimen kameraa...</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCBt38gSC3HTSqYb4OVTK6-LZz7Vi8r8Mg",
+        authDomain: "tammalahtirock2.firebaseapp.com",
+        projectId: "tammalahtirock2",
+        storageBucket: "tammalahtirock2.firebasestorage.app",
+        messagingSenderId: "376885311923",
+        appId: "1:376885311923:web:c7f0215004703e5676f3c6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    // Varmistetaan että kamerasivullakin on sama nimigeneraattori valmiina
+    const etuliitteet = ["DJ", "Kapteeni", "Kuningas", "Lady", "Herra", "Tohtori", "Iso", "Pikku", "Ylipäällikkö", "Metsän"];
+    const keskiosat = ["Glitter", "Crocs", "Tölkki", "Sauna", "Makkara", "Disco", "Hyttynen", "Nuotio", "Basso", "Kimallus"];
+    const loput = ["Keisari", "Noita", "Ninja", "Mestari", "Ruhtinas", "Velho", "Kulkija", "Sankari", "Tietäjä", "Tuhooja"];
+
+    if (!localStorage.getItem('festariNimiID')) {
+        const e = etuliitteet[Math.floor(Math.random() * etuliitteet.length)];
+        const k = keskiosat[Math.floor(Math.random() * keskiosat.length)];
+        const l = loput[Math.floor(Math.random() * loput.length)];
+        localStorage.setItem('festariNimiID', `${e} ${k} ${l}`);
+    }
+    const myFestariNimi = localStorage.getItem('festariNimiID');
+    document.getElementById('user-badge-display').innerText = `Kuvaajana: ${myFestariNimi}`;
+
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const statusDiv = document.getElementById('status');
+    const snapBtn = document.getElementById('snap-btn');
+    const flashEffect = document.getElementById('flash-effect');
+
+    async function startCamera() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: "environment", aspectRatio: 1 }, 
+                audio: false 
+            });
+            video.srcObject = stream;
+            statusDiv.innerText = "Kamera valmis. Hymyile!";
+        } catch (err) {
+            try {
+                const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = fallbackStream;
+                statusDiv.innerText = "Kamera valmis.";
+            } catch(e) {
+                statusDiv.innerText = "Salli kamera puhelimen asetuksista.";
+                snapBtn.disabled = true;
+            }
+        }
+    }
+
+    window.takeSnapshot = function() {
+        snapBtn.disabled = true;
+        flashEffect.style.animation = "none";
+        setTimeout(() => { flashEffect.style.animation = "flash-animation 0.5s ease-out"; }, 10);
+
+        const context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, 800, 800);
+        
+        canvas.toBlob(async (blob) => {
+            if (!blob) { snapBtn.disabled = false; return; }
+            statusDiv.innerText = "Ladataan kuvaa galleriaan...";
+            
+            // Siistitään tiedostonimeä poistamalla välilyönnit
+            const safeName = myFestariNimi.replace(/\s+/g, '_');
+            const fileName = `user_${safeName}_${Date.now()}.jpg`;
+            const storageRef = ref(storage, 'kuvat/' + fileName);
+
+            try {
+                const uploadResult = await uploadBytes(storageRef, blob);
+                const downloadURL = await getDownloadURL(uploadResult.ref);
+                
+                // Tallennetaan tekijän nimi tietokantaan mukaan!
+                await addDoc(collection(db, "kuvat"), {
+                    kuva_url: downloadURL,
+                    tekija_nimi: myFestariNimi, 
+                    aika: serverTimestamp()
+                });
+
+                statusDiv.innerText = "Kuva tallennettu onnistuneesti!";
+            } catch (error) {
+                statusDiv.innerText = "Lataus epäonnistui. Tarkista yhteys.";
+            }
+            snapBtn.disabled = false;
+        }, 'image/jpeg', 0.75);
+    }
+
+    startCamera();
+</script>
+</body>
+</html>
