@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kohtalon Koju - Tammalahtirock 2026</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b001a; color: white; text-align: center;
+            margin: 0; padding: 20px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; min-height: 100vh; box-sizing: border-box;
+        }
+        .crystal-ball {
+            width: 150px; height: 150px; background: radial-gradient(circle, #8a2be2, #4b0082, #000);
+            border-radius: 50%; box-shadow: 0 0 30px #8a2be2, inset 0 0 20px #fff;
+            margin: 20px 0; display: flex; align-items: center; justify-content: center;
+            font-size: 50px; animation: pulse 3s infinite alternate;
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.05); box-shadow: 0 0 50px #da70d6; } }
+        .box {
+            background: rgba(255,255,255,0.05); border: 2px solid #8a2be2;
+            padding: 25px; border-radius: 15px; max-width: 400px; width: 100%;
+            box-sizing: border-box; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .btn {
+            background: linear-gradient(45deg, #8a2be2, #da70d6); color: white; border: none;
+            padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 50px;
+            cursor: pointer; margin-top: 20px; width: 100%;
+        }
+        #challenge-text { font-size: 20px; font-weight: bold; color: #00f0ff; min-height: 80px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+
+    <h1>🔮 KOHTALON KOJU</h1>
+    <p>Tammalahtirock 2026</p>
+
+    <div class="crystal-ball">👁️</div>
+
+    <div class="box">
+        <h3>Tekoäly määrittää kohtalosi...</h3>
+        <p style="font-size: 14px; opacity: 0.7;">Paina nappia, suorita tekoälyn antama absurdi festaritehtävä ja leimaa passisi.</p>
+        <div id="challenge-text">Kosketa kristallipalloa saadaksesi tehtävän...</div>
+        <button id="action-btn" class="btn" onclick="generateChallenge()">ARVO TEHTÄVÄ</button>
+    </div>
+
+<script>
+    const haasteet = [
+        "Etsi käsiisi henkilö, jolla on Crocsit jalassa, ja kehu hänen jalkinevalintaansa runollisesti.",
+        "Mene pyytämään miksauspöydän työntekijältä nimikirjoitusta nenäliinaan.",
+        "Esitä hidastettua rokkikukkoa 30 sekunnin ajan keskellä festarialuetta.",
+        "Käy kohteliaasti kysymässä järjestyksenvalvojalta, saako alueella harrastaa ilmakitaran soittoa ilman lupakorttia.",
+        "Etsi festarialueen suurin kivi ja pidä sille lyhyt, mutta koskettava kiitospuhe.",
+        "Uloita yläfemma vähintään kolmelle tuntemattomalle festarivieraalle peräkkäin sanoen 'Kimaltelet upeasti!'",
+        "Kävele seuraavat 3 minuuttia pelkästään takaperin tai sivuttain kuin rapu.",
+        "Mene hattarakojulle ja kysy vakavalla naamalla, voiko hattaran saada valkosipulin makuisena."
+    ];
+
+    let vaihe = 0;
+
+    function generateChallenge() {
+        if (vaihe === 0) {
+            const randomHaaste = haasteet[Math.floor(Math.random() * haasteet.length)];
+            document.getElementById('challenge-text').innerText = `KÄSKY: "${randomHaaste}"`;
+            document.getElementById('action-btn').innerText = "MERKITSE TEHTÄVÄ SUORITETUKSI";
+            vaihe = 1;
+        } else {
+            localStorage.setItem('suoritus_kohtalo', 'true');
+            document.getElementById('challenge-text').innerText = "🔮 Tehtävä suoritettu! Kohtalo kiittää ja passisi on leimattu.";
+            document.getElementById('action-btn').style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>
