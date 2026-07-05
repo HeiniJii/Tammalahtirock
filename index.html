@@ -5,49 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tammalahtirock 2026</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0; padding: 0;
-            background-color: #121212; color: #ffffff;
-        }
-        header {
-            background-color: #1f1f1f; padding: 20px; text-align: center;
-            border-bottom: 2px solid #ff007f;
-        }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #121212; color: #ffffff; }
+        header { background-color: #1f1f1f; padding: 20px; text-align: center; border-bottom: 2px solid #ff007f; }
         nav { display: flex; justify-content: center; background-color: #2a2a2a; overflow-x: auto; }
-        nav button {
-            background: none; border: none; color: #fff; padding: 15px 20px;
-            cursor: pointer; font-size: 16px; transition: 0.3s; white-space: nowrap;
-        }
-        nav button:hover, nav button.active { background-color: #ff007f; color: white; }
+        nav button { background: none; border: none; color: #fff; padding: 15px 20px; cursor: pointer; font-size: 16px; transition: 0.3s; white-space: nowrap; }
+        nav button:hover, nav button.active { background-color: #ff007f; }
         .container { padding: 20px; max-width: 800px; margin: auto; padding-bottom: 50px; }
         .page { display: none; }
         .page.active { display: block; }
-        .card {
-            background-color: #1e1e1e; padding: 20px; margin-bottom: 15px;
-            border-radius: 8px; border-left: 5px solid #00f0ff;
-        }
+        .card { background-color: #1e1e1e; padding: 20px; margin-bottom: 15px; border-radius: 8px; border-left: 5px solid #00f0ff; }
         .news-flash { border-left-color: #ffcc00; }
-        .pass {
-            background: linear-gradient(45deg, #ff007f, #7928ca);
-            padding: 30px; text-align: center; border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-        .pass h3 { margin: 0; font-size: 14px; letter-spacing: 2px; opacity: 0.8; }
-        .festival-name { font-size: 26px; font-weight: bold; margin: 15px 0; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .gallery {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;
-        }
-        .gallery-item { position: relative; height: 150px; border-radius: 8px; overflow: hidden; background-color: #333; }
+        .pass { background: linear-gradient(45deg, #ff007f, #7928ca); padding: 30px; text-align: center; border-radius: 15px; }
+        .festival-name { font-size: 26px; font-weight: bold; margin: 15px 0; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+        .gallery-item { position: relative; height: 140px; border-radius: 8px; overflow: hidden; background-color: #333; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
-        .gallery-item .author-tag {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            background: rgba(0,0,0,0.7); color: #fff; font-size: 10px;
-            padding: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .my-stamps {
-            margin-top: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; text-align: left;
-        }
+        .gallery-item .author-tag { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); font-size: 10px; padding: 4px; text-align: center; }
+        
+        /* Leimasintyylit passissa */
+        .stamps-grid { display: flex; justify-content: space-around; margin: 20px 0; gap: 10px; }
+        .stamp-box { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 10px; flex: 1; font-size: 12px; border: 2px dashed #aaa; }
+        .stamp-box.checked { border-color: #00f0ff; background: rgba(0, 240, 255, 0.2); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -62,60 +40,46 @@
     <button onclick="showPage('kartta')" id="btn-kartta">Aluekartta</button>
     <button onclick="showPage('ohjelma')" id="btn-ohjelma">Ohjelma</button>
     <button onclick="showPage('passi')" id="btn-passi">Festaripassi</button>
-    <button onclick="showPage('galleria')" id="btn-galleria">Yhteiset Kuvat</button>
+    <button onclick="showPage('galleria')" id="btn-galleria">Kuvaseinä</button>
 </nav>
 
 <div class="container">
 
     <!-- ETUSIVU & UUTISET -->
     <div id="koti" class="page active">
-        <h2>Live-uutiset & Bannerit</h2>
-        <div id="news-container"><p>Yhdistetään tietokantaan...</p></div>
+        <h2>Live-uutiset (AI-Newsroom)</h2>
+        <div id="news-container">Päivitetään uutisia...</div>
     </div>
 
-    <!-- ALUEKARTTA -->
-    <div id="kartta" class="page">
-        <h2>Aluekartta</h2>
-        <div class="card">
-            <p>🗺️ [Tähän tulee myöhemmin festarialueen kartta]</p>
-            <div style="width: 100%; height: 300px; background: #333; display:flex; align-items:center; justify-content:center;">[ Kartta ]</div>
-        </div>
-    </div>
-
-    <!-- OHJELMA -->
-    <div id="ohjelma" class="page">
-        <h2>Festivaaliohjelma</h2>
-        <div class="card"><h3>18:00 - Portit auki & Alkulämmöt</h3><p>Päälava</p></div>
-        <div class="card"><h3>20:00 - Mysteeriartisti X</h3><p>Telttalava</p></div>
-    </div>
+    <!-- KARTTA & OHJELMA -->
+    <div id="kartta" class="page"><h2>Aluekartta</h2><div class="card">[ Karttakuva tulossa ]</div></div>
+    <div id="ohjelma" class="page"><h2>Ohjelma</h2><div class="card"><h3>18:00 - Portit</h3></div><div class="card"><h3>21:00 - Showtime</h3></div></div>
 
     <!-- DIGITAALINEN PASSI -->
     <div id="passi" class="page">
         <h2>Digitaalinen Festaripassi</h2>
         <div class="pass">
-            <h3>TAMMALAHTIROCK 2026 • VIP</h3>
-            <div class="festival-name" id="festival-name-display">Ladataan nimeä...</div>
-            <div style="background: white; padding: 10px; display: inline-block; margin-top: 5px; border-radius: 5px;">
-                <span style="color: black; font-weight: bold; font-size: 12px;">[ QR-KOODI AKTIIVINEN ]</span>
-            </div>
+            <h3>TAMMALAHTIROCK 2026</h3>
+            <div class="festival-name" id="festival-name-display">Ladataan...</div>
             
-            <div class="my-stamps">
-                <h4 style="margin: 0 0 5px 0;">📸 Minun kuvamuistoni</h4>
-                <p style="font-size: 12px; margin: 0 0 10px 0; opacity: 0.8;">Skannaa alueen QR-koodi puhelimellasi niin ottamasi kuvat ilmestyvät tähän.</p>
-                <div class="gallery" id="my-photo-gallery">
-                    <p>Ei vielä omia passikuvia.</p>
-                </div>
+            <h4>🎫 Kojusuoritukset & Leimat</h4>
+            <div class="stamps-grid">
+                <div class="stamp-box" id="stamp-kamera">📸 Festarikamera</div>
+                <div class="stamp-box" id="stamp-glitter">✨ Glitter & Tatuointi</div>
+                <div class="stamp-box" id="stamp-kohtalo">🔮 Kohtalon Koju</div>
+            </div>
+
+            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:10px; text-align:left;">
+                <h4 style="margin:0 0 10px 0;">Omat festarikuvasi:</h4>
+                <div class="gallery" id="my-photo-gallery"><p>Ei kuvia vielä.</p></div>
             </div>
         </div>
     </div>
 
-    <!-- VALOKUVAGALLERIA -->
+    <!-- KUVAGALLERIA -->
     <div id="galleria" class="page">
-        <h2>Kaikkien yhteinen kuvaseinä</h2>
-        <p>Festarikansan parhaat otokset livenä.</p>
-        <div class="gallery" id="photo-gallery">
-            <p>Odotellaan kuvia...</p>
-        </div>
+        <h2>Yhteinen kuvaseinä</h2>
+        <div class="gallery" id="photo-gallery">Odotellaan otoksia...</div>
     </div>
 
 </div>
@@ -136,21 +100,14 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // NIMIGENERAATTORI
+    // Haetaan festarinimi
     const etuliitteet = ["DJ", "Kapteeni", "Kuningas", "Lady", "Herra", "Tohtori", "Iso", "Pikku", "Ylipäällikkö", "Metsän"];
     const keskiosat = ["Glitter", "Crocs", "Tölkki", "Sauna", "Makkara", "Disco", "Hyttynen", "Nuotio", "Basso", "Kimallus"];
     const loput = ["Keisari", "Noita", "Ninja", "Mestari", "Ruhtinas", "Velho", "Kulkija", "Sankari", "Tietäjä", "Tuhooja"];
-
-    function arvoFestariNimi() {
-        const e = etuliitteet[Math.floor(Math.random() * etuliitteet.length)];
-        const k = keskiosat[Math.floor(Math.random() * keskiosat.length)];
-        const l = loput[Math.floor(Math.random() * loput.length)];
-        return `${e} ${k} ${l}`;
-    }
-
-    // Luodaan tai haetaan festarinimi laitteen muistista
+    
     if (!localStorage.getItem('festariNimiID')) {
-        localStorage.setItem('festariNimiID', arvoFestariNimi());
+        const name = `${etuliitteet[Math.floor(Math.random()*10.0)]} ${keskiosat[Math.floor(Math.random()*10.0)]} ${loput[Math.floor(Math.random()*10.0)]}`;
+        localStorage.setItem('festariNimiID', name);
     }
     const myFestariNimi = localStorage.getItem('festariNimiID');
     document.getElementById('festival-name-display').innerText = myFestariNimi;
@@ -162,65 +119,80 @@
         buttons.forEach(btn => btn.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
         document.getElementById('btn-' + pageId).classList.add('active');
+
+        // Tarkistetaan passi-leimat kun mennään passivälilehdelle
+        if(pageId === 'passi') {
+            if(localStorage.getItem('suoritus_glitter')) document.getElementById('stamp-glitter').className = "stamp-box checked";
+            if(localStorage.getItem('suoritus_kohtalo')) document.getElementById('stamp-kohtalo').className = "stamp-box checked";
+        }
     }
 
-    // Live-uutiset
-    const newsContainer = document.getElementById('news-container');
-    onSnapshot(query(collection(db, "uutiset"), orderBy("aika", "desc")), (snapshot) => {
-        newsContainer.innerHTML = "";
-        if (snapshot.empty) { newsContainer.innerHTML = "<p>Ei uutisia juuri nyt.</p>"; return; }
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            const card = document.createElement('div');
-            card.className = 'card news-flash';
-            card.innerHTML = `<h3>${data.otsikko || '🚨'}</h3><p>${data.teksti || ''}</p>`;
-            newsContainer.appendChild(card);
-        });
-    });
+    // AI-FEIKKIUUTISET (Päivittyy parin tunnin välein livenä)
+    const tekoalyUutiset = [
+        { tunti: 14, otsikko: "🚨 Porttikaaos peruttu!", teksti: "Portit avattiin klo 14:00. Ensimmäinen vieras yritti tuoda festarialueelle lemmikkisammakkoa, sammakko käännytettiin takaisin." },
+        { tunti: 16, otsikko: "⚠️ Hälytys ruokakojulla", teksti: "Makkaranpaistopisteen ylle kerääntyi ennätysmäinen 4000 hyttysen pilvi. Festarikansaa pyydetään tanssimaan nopeammin hyttysten hämäämiseksi." },
+        { tunti: 18, otsikko: "⭐ VIP-alueen kuulumisia", teksti: "Tuntematon rokkari on juuri bongattu jonottamassa bajamajaan VIP-passi väärinpäin kaulassa. Huhut kertovat kyseessä olleen salep-julkkis." },
+        { tunti: 20, otsikko: "🔥 Päälavan mysteeri", teksti: "Bändin basistin basso katosi. Se löytyi 10 minuuttia myöhemmin festarialueen saunan lauteilta lämmittelemästä." },
+        { tunti: 22, otsikko: "🌌 Glitter-kriisi!", teksti: "Festarialueen glittervarastot uhkaavat loppua kesken. Ylipäälliköt kehoittavat säästeliääseen kimaltelemiseen yön pikkutunneilla." }
+    ];
 
-    // Kuvat-seuranta
+    function paivitaUutiset() {
+        const newsContainer = document.getElementById('news-container');
+        newsContainer.innerHTML = "";
+        
+        const nykyinenTunti = new Date().getHours();
+        let uutisiaNaytetty = 0;
+
+        tekoalyUutiset.forEach(u => {
+            // Näytetään uutinen, jos sen julkaisutunti on jo ohitettu tai saavutettu
+            if (nykyinenTunti >= u.tunti || nykyinenTunti < 6) { // Lisätty yö-looppi varmistukseksi
+                const card = document.createElement('div');
+                card.className = 'card news-flash';
+                card.innerHTML = `<h3>${u.otsikko}</h3><p>${u.teksti}</p>`;
+                newsContainer.appendChild(card);
+                uutisiaNaytetty++;
+            }
+        });
+        if(uutisiaNaytetty === 0) {
+            newsContainer.innerHTML = "<p>Tammalahtirock 2026 on alkanut rauhallisesti! Odotellaan uutisia uutishuoneesta...</p>";
+        }
+    }
+    paivitaUutiset();
+    setInterval(paivitaUutiset, 60000); // Päivitetään minuutin välein taustalla
+
+    // Kuvagalleria (Kuuntelu)
     const galleryContainer = document.getElementById('photo-gallery');
     const myGalleryContainer = document.getElementById('my-photo-gallery');
 
     onSnapshot(query(collection(db, "kuvat"), orderBy("aika", "desc")), (snapshot) => {
-        galleryContainer.innerHTML = "";
-        myGalleryContainer.innerHTML = "";
-        
+        galleryContainer.innerHTML = ""; myGalleryContainer.innerHTML = "";
         let hasMyPhotos = false;
 
         snapshot.forEach((doc) => {
             const data = doc.data();
             if (data.kuva_url) {
-                // Luodaan kuva-elementti yhteiselle seinälle nimen kanssa
                 const item = document.createElement('div');
                 item.className = 'gallery-item';
-                
-                const img = document.createElement('img');
-                img.src = data.kuva_url;
-                
-                const tag = document.createElement('div');
-                tag.className = 'author-tag';
-                tag.innerText = data.tekija_nimi || "Tuntematon Rokkari";
-                
-                item.appendChild(img);
-                item.appendChild(tag);
+                const img = document.createElement('img'); img.src = data.kuva_url;
+                const tag = document.createElement('div'); tag.className = 'author-tag';
+                tag.innerText = (data.tyyppi === 'glitter' ? "✨ " : "📸 ") + data.tekija_nimi;
+                item.appendChild(img); item.appendChild(tag);
                 galleryContainer.appendChild(item);
 
-                // Jos kuvan ottajan nimi täsmää tämän laitteen nimeen, se menee omaan passiinfoon
                 if (data.tekija_nimi === myFestariNimi) {
                     hasMyPhotos = true;
-                    const myItem = document.createElement('div');
-                    myItem.className = 'gallery-item';
-                    const myImg = document.createElement('img');
-                    myImg.src = data.kuva_url;
-                    myItem.appendChild(myImg);
-                    myGalleryContainer.appendChild(myItem);
+                    // Leimataan ensimmäinen kamerasuoritus tehdyksi laitteen muistiin
+                    localStorage.setItem('suoritus_kamera', 'true');
+                    document.getElementById('stamp-kamera').className = "stamp-box checked";
+                    
+                    const myItem = document.createElement('div'); myItem.className = 'gallery-item';
+                    const myImg = document.createElement('img'); myImg.src = data.kuva_url;
+                    myItem.appendChild(myImg); myGalleryContainer.appendChild(myItem);
                 }
             }
         });
-
-        if (galleryContainer.innerHTML === "") galleryContainer.innerHTML = "<p>Ei vielä kuvia.</p>";
-        if (!hasMyPhotos) myGalleryContainer.innerHTML = "<p>Ei vielä omia passikuvia.</p>";
+        if (galleryContainer.innerHTML === "") galleryContainer.innerHTML = "<p>Ei kuvia.</p>";
+        if (!hasMyPhotos) myGalleryContainer.innerHTML = "<p>Ei omia kuvia vielä.</p>";
     });
 </script>
 </body>
