@@ -13,7 +13,7 @@
             color: #ffffff;
         }
         
-        /* Joustava yläbanneri cyberpunk-kuvalla (.png korjattu) */
+        /* Joustava yläbanneri cyberpunk-kuvalla (.png) */
         header {
             position: relative;
             background-image: linear-gradient(to bottom, rgba(0,0,0,0) 80%, rgba(18,18,18,1) 100%), url('tammalahti_banner.png');
@@ -26,7 +26,7 @@
             background-color: #121212;
         }
 
-        /* Oikea reaaliaikainen laskuri kuvan tekstin päällä */
+        /* Oikea reaaliaikainen laskuri kuvan tekstin päälle */
         .countdown-overlay {
             position: absolute;
             top: 4.8%;
@@ -177,11 +177,13 @@
 
 <div class="container">
 
+    <!-- ETUSIVU & UUTISET -->
     <div id="koti" class="page active">
         <h2>Live-uutiset (AI-Newsroom)</h2>
         <div id="news-container">Päivitetään uutisia...</div>
     </div>
 
+    <!-- KARTTA & OHJELMA -->
     <div id="kartta" class="page">
         <h2>Aluekartta</h2>
         <div class="card">
@@ -196,6 +198,7 @@
         <div class="card"><h3>20:00 - Mysteeriartisti X</h3><p>Telttalava</p></div>
     </div>
 
+    <!-- DIGITAALINEN PASSI -->
     <div id="passi" class="page">
         <h2>Digitaalinen Festaripassi</h2>
         <div class="pass">
@@ -216,6 +219,7 @@
         </div>
     </div>
 
+    <!-- KUVAGALLERIA -->
     <div id="galleria" class="page">
         <h2>Kaikkien yhteinen kuvaseinä</h2>
         <p>Festarikansan parhaat otokset livenä.</p>
@@ -224,6 +228,42 @@
 
 </div>
 
+<!-- Välilehtien ohjaus globaaliksi, jotta toimii välittömästi -->
+<script>
+    function showPage(pageId) {
+        const pages = document.querySelectorAll('.page');
+        const buttons = document.querySelectorAll('nav button');
+        pages.forEach(page => page.classList.remove('active'));
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        const targetPage = document.getElementById(pageId);
+        const targetBtn = document.getElementById('btn-' + pageId);
+        
+        if(targetPage && targetBtn) {
+            targetPage.classList.add('active');
+            targetBtn.classList.add('active');
+        }
+
+        if(pageId === 'passi') {
+            if(localStorage.getItem('suoritus_kamera')) {
+                const el = document.getElementById('stamp-kamera');
+                if(el) el.className = "stamp-box checked";
+            }
+            if(localStorage.getItem('suoritus_glitter')) {
+                const el = document.getElementById('stamp-glitter');
+                if(el) el.className = "stamp-box checked";
+            }
+            if(localStorage.getItem('suoritus_kohtalo')) {
+                const el = document.getElementById('stamp-kohtalo');
+                if(el) el.className = "stamp-box checked";
+            }
+        }
+    }
+    // Tehdään funktiosta globaalisti saavutettava
+    window.showPage = showPage;
+</script>
+
+<!-- LASKURI JA FIREBASE -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -249,14 +289,16 @@
         localStorage.setItem('festariNimiID', name);
     }
     const myFestariNimi = localStorage.getItem('festariNimiID');
-    document.getElementById('festival-name-display').innerText = myFestariNimi;
+    const nameDisplay = document.getElementById('festival-name-display');
+    if(nameDisplay) nameDisplay.innerText = myFestariNimi;
 
-    // --- REAALIAIKAINEN LASKURI ---
+    // Laskurilogiikka korjattu suoritusvarmaksi
     const alkamisaika = new Date("July 17, 2026 14:00:00").getTime();
     const paattymisaika = new Date("July 19, 2026 23:59:59").getTime();
     const countdownElement = document.getElementById("rave-countdown");
 
     function updateCountdown() {
+        if(!countdownElement) return;
         const nyt = new Date().getTime();
         
         if (nyt < alkamisaika) {
@@ -280,4 +322,81 @@
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    window.showPage =
+    // AI-FEIKKIUUTISET
+    const tekoalyUutiset = [
+        { tunti: 14, otsikko: "🚨 Porttikaaos peruttu!", teksti: "Portit avattiin klo 14:00. Ensimmäinen vieras yritti tuoda festarialueelle lemmikkisammakkoa, sammakko käännytettiin takaisin." },
+        { tunti: 16, otsikko: "⚠️ Hälytys ruokakojulla", teksti: "Makkaranpaistopisteen ylle kerääntyi ennätysmäinen 4000 hyttysen pilvi. Festarikansaa pyydetään tanssimaan nopeammin hyttysten hämäämiseksi." },
+        { tunti: 18, otsikko: "⭐ VIP-alueen kuulumisia", teksti: "Tuntematon rokkari on juuri bongattu jonottamassa bajamajaan VIP-passi väärinpäin kaulassa. Huhut kertovat kyseessä olleen salep-julkkis." },
+        { tunti: 20, otsikko: "🔥 Päälavan mysteeri", teksti: "Bändin basistin basso katosi. Se löytyi 10 minuuttia myöhemmin festarialueen saunan lauteilta lämmittelemästä." },
+        { tunti: 22, otsikko: "🌌 Glitter-kriisi!", teksti: "Festarialueen glittervarastot uhkaavat loppua kesken. Ylipäälliköt kehoittavat säästeliääseen kimaltelemiseen yön pikkutunneilla." }
+    ];
+
+    function paivitaUutiset() {
+        const newsContainer = document.getElementById('news-container');
+        if(!newsContainer) return;
+        newsContainer.innerHTML = "";
+        
+        // Koska ollaan heinäkuun alussa (ennen festareita), pakotetaan uutiset näkyviin testaamista varten simuloimalla tuntia 23
+        const nykyinenTunti = 23; 
+        let uutisiaNaytetty = 0;
+
+        tekoalyUutiset.forEach(u => {
+            if (nykyinenTunti >= u.tunti) {
+                const card = document.createElement('div');
+                card.className = 'card news-flash';
+                card.innerHTML = `<h3>${u.otsikko}</h3><p>${u.teksti}</p>`;
+                newsContainer.appendChild(card);
+                uutisiaNaytetty++;
+            }
+        });
+    }
+    paivitaUutiset();
+
+    // Kuvagalleria livenä Firebasesta
+    const galleryContainer = document.getElementById('photo-gallery');
+    const myGalleryContainer = document.getElementById('my-photo-gallery');
+
+    onSnapshot(query(collection(db, "kuvat"), orderBy("aika", "desc")), (snapshot) => {
+        if(galleryContainer) galleryContainer.innerHTML = ""; 
+        if(myGalleryContainer) myGalleryContainer.innerHTML = "";
+        let hasMyPhotos = false;
+
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.kuva_url) {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                const img = document.createElement('img'); img.src = data.kuva_url;
+                const tag = document.createElement('div'); tag.className = 'author-tag';
+                tag.innerText = (data.tyyppi === 'glitter' ? "✨ " : "📸 ") + (data.tekija_nimi || "Mysteeri Rokkari");
+                item.appendChild(img); item.appendChild(tag);
+                if(galleryContainer) galleryContainer.appendChild(item);
+
+                if (data.tekija_nimi === myFestariNimi) {
+                    hasMyPhotos = true;
+                    if (data.tyyppi === 'glitter') {
+                        localStorage.setItem('suoritus_glitter', 'true');
+                    } else {
+                        localStorage.setItem('suoritus_kamera', 'true');
+                    }
+                    
+                    const myItem = document.createElement('div'); myItem.className = 'gallery-item';
+                    const myImg = document.createElement('img'); myImg.src = data.kuva_url;
+                    myItem.appendChild(myImg); 
+                    if(myGalleryContainer) myGalleryContainer.appendChild(myItem);
+                }
+            }
+        });
+        
+        if (galleryContainer && galleryContainer.innerHTML === "") galleryContainer.innerHTML = "<p>Ei kuvia.</p>";
+        if (myGalleryContainer && !hasMyPhotos) myGalleryContainer.innerHTML = "<p>Ei omia kuvia vielä.</p>";
+        
+        // Päivitetään leimat heti jos kuvia löytyi taustalta
+        if(localStorage.getItem('suoritus_kamera')) {
+            const el = document.getElementById('stamp-kamera');
+            if(el) el.className = "stamp-box checked";
+        }
+    });
+</script>
+</body>
+</html>
