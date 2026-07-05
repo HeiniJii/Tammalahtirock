@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festarit 2026</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        header {
+            background-color: #1f1f1f;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #ff007f;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #2a2a2a;
+            overflow-x: auto;
+        }
+        nav button {
+            background: none;
+            border: none;
+            color: #fff;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        nav button:hover, nav button.active {
+            background-color: #ff007f;
+            color: white;
+        }
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        .card {
+            background-color: #1e1e1e;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #00f0ff;
+        }
+        .news-flash {
+            border-left-color: #ffcc00;
+        }
+        .pass {
+            background: linear-gradient(45deg, #ff007f, #7928ca);
+            padding: 30px;
+            text-align: center;
+            border-radius: 15px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        .gallery img {
+            width: 100%;
+            border-radius: 8px;
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>FESTARIT 2026</h1>
+    <p>Vuoden kreisein viikonloppu</p>
+</header>
+
+<nav>
+    <button onclick="showPage('koti')" id="btn-koti" class="active">Etusivu</button>
+    <button onclick="showPage('kartta')" id="btn-kartta">Aluekartta</button>
+    <button onclick="showPage('ohjelma')" id="btn-ohjelma">Ohjelma</button>
+    <button onclick="showPage('passi')" id="btn-passi">Festaripassi</button>
+    <button onclick="showPage('galleria')" id="btn-galleria">Kuvat</button>
+</nav>
+
+<div class="container">
+
+    <div id="koti" class="page active">
+        <h2>Live-uutiset & Tunnelma</h2>
+        <div id="news-container">
+            <div class="card news-flash">
+                <h3>⚠️ Breaking News!</h3>
+                <p>Päälavan artisti myöhästyy, koska juuttui hattarakoneeseen. Keikka alkaa 15min myöhässä.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="kartta" class="page">
+        <h2>Aluekartta</h2>
+        <div class="card">
+            <p>🗺️ [Tähän tulee interaktiivinen kartta tai kuva]</p>
+            <div style="width: 100%; height: 300px; background: #333; display:flex; align-items:center; justify-content:center;">
+                [ Karttakuva / Kartta-API ]
+            </div>
+        </div>
+    </div>
+
+    <div id="ohjelma" class="page">
+        <h2>Festivaaliohjelma</h2>
+        <div class="card"><h3>18:00 - Avausshow</h3><p>Päälava</p></div>
+        <div class="card"><h3>20:00 - Yllätysesiintyjä</h3><p>Teltta</p></div>
+        <div class="card"><h3>22:00 - Ilotulitus ja feikkiuutisten finaali</h3><p>Rantalava</p></div>
+    </div>
+
+    <div id="passi" class="page">
+        <h2>Digitaalinen Festaripassi</h2>
+        <div class="pass">
+            <h3>VIP PASSI</h3>
+            <p>Omistaja: Festarivieras #1337</p>
+            <div style="background: white; padding: 10px; display: inline-block; margin-top: 10px;">
+                <span style="color: black; font-weight: bold;">[ QR-KOODI ]</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="galleria" class="page">
+        <h2>Kojun valokuvat</h2>
+        <p>Valokuvakojulla otetut kuvat ilmestyvät tänne reaaliajassa!</p>
+        <div class="gallery" id="photo-gallery">
+            <div style="height: 150px; background: #444; display:flex; align-items:center; justify-content:center;">Kuva 1</div>
+            <div style="height: 150px; background: #444; display:flex; align-items:center; justify-content:center;">Kuva 2</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Välilehtien vaihto
+    function showPage(pageId) {
+        const pages = document.querySelectorAll('.page');
+        const buttons = document.querySelectorAll('nav button');
+        
+        pages.forEach(page => page.classList.remove('active'));
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(pageId).classList.add('active');
+        document.getElementById('btn-' + pageId).classList.add('active');
+    }
+
+    // Esimerkki: Feikkiuutisten simulointi (lisää uutisen 10 sekunnin välein)
+    const fakeNews = [
+        "Poliisi varoittaa: Alueella liikkuu erittäin huonoja puujalkavitsejä kertova mies.",
+        "VIP-alueen hanhet ovat aloittaneet lakon. Skumppaa ei tarjoilla ennen kuin maissintähdät on palautettu.",
+        "Löydetty: Yhden koon sukat. Omistajaa pyydetään noutamaan ne infopisteeltä jalassa."
+    ];
+
+    setInterval(() => {
+        if(fakeNews.length > 0) {
+            const newsContainer = document.getElementById('news-container');
+            const randomNews = fakeNews.shift(); // Ottaa uutisen jonosta
+            
+            const newsCard = document.createElement('div');
+            newsCard.className = 'card news-flash';
+            newsCard.innerHTML = `<h3>🚨 Juuri nyt!</h3><p>${randomNews}</p>`;
+            
+            newsContainer.insertBefore(newsCard, newsContainer.firstChild);
+        }
+    }, 10000); // 10 sekuntia
+</script>
+</body>
+</html>
