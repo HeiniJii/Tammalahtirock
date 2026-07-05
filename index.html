@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Festarit 2026</title>
+    <title>Tammalahtirock 2026</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -32,6 +32,7 @@
             cursor: pointer;
             font-size: 16px;
             transition: 0.3s;
+            white-space: nowrap;
         }
         nav button:hover, nav button.active {
             background-color: #ff007f;
@@ -41,6 +42,7 @@
             padding: 20px;
             max-width: 800px;
             margin: auto;
+            padding-bottom: 100px; /* Tilaa testipaneelille */
         }
         .page {
             display: none;
@@ -71,16 +73,45 @@
         }
         .gallery img {
             width: 100%;
+            height: 150px;
+            object-fit: cover;
             border-radius: 8px;
             background-color: #333;
+        }
+        /* Testipaneelin tyylit */
+        .admin-panel {
+            background-color: #222;
+            border-top: 3px dashed #ffcc00;
+            padding: 15px;
+            margin-top: 40px;
+            border-radius: 8px;
+        }
+        .admin-panel input, .admin-panel textarea, .admin-panel button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: white;
+            box-sizing: border-box;
+        }
+        .admin-panel button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .admin-panel button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>FESTARIT 2026</h1>
-    <p>Vuoden kreisein viikonloppu</p>
+    <h1>TAMMALAHTIROCK 2026</h1>
+    <p>Reaaliaikainen festariopas & live-seuranta</p>
 </header>
 
 <nav>
@@ -94,86 +125,150 @@
 <div class="container">
 
     <div id="koti" class="page active">
-        <h2>Live-uutiset & Tunnelma</h2>
+        <h2>Live-uutiset & Bannerit</h2>
         <div id="news-container">
-            <div class="card news-flash">
-                <h3>⚠️ Breaking News!</h3>
-                <p>Päälavan artisti myöhästyy, koska juuttui hattarakoneeseen. Keikka alkaa 15min myöhässä.</p>
-            </div>
+            <p>Yhdistetään Tammalahtirockin tietokantaan...</p>
         </div>
     </div>
 
     <div id="kartta" class="page">
         <h2>Aluekartta</h2>
         <div class="card">
-            <p>🗺️ [Tähän tulee interaktiivinen kartta tai kuva]</p>
+            <p>🗺️ [Tähän tulee myöhemmin festarialueen kartta]</p>
             <div style="width: 100%; height: 300px; background: #333; display:flex; align-items:center; justify-content:center;">
-                [ Karttakuva / Kartta-API ]
+                [ Aluekartta placeholder ]
             </div>
         </div>
     </div>
 
     <div id="ohjelma" class="page">
         <h2>Festivaaliohjelma</h2>
-        <div class="card"><h3>18:00 - Avausshow</h3><p>Päälava</p></div>
-        <div class="card"><h3>20:00 - Yllätysesiintyjä</h3><p>Teltta</p></div>
-        <div class="card"><h3>22:00 - Ilotulitus ja feikkiuutisten finaali</h3><p>Rantalava</p></div>
+        <div class="card"><h3>18:00 - Portit auki & Alkulämmöt</h3><p>Päälava</p></div>
+        <div class="card"><h3>20:00 - Mysteeriartisti X</h3><p>Telttalava</p></div>
+        <div class="card"><h3>22:30 - Pääesiintyjä</h3><p>Päälava</p></div>
     </div>
 
     <div id="passi" class="page">
         <h2>Digitaalinen Festaripassi</h2>
         <div class="pass">
-            <h3>VIP PASSI</h3>
-            <p>Omistaja: Festarivieras #1337</p>
+            <h3>TAMMALAHTIROCK VIP 2026</h3>
+            <p>Käyttäjä: Rock-Kansalainen #1337</p>
             <div style="background: white; padding: 10px; display: inline-block; margin-top: 10px;">
-                <span style="color: black; font-weight: bold;">[ QR-KOODI ]</span>
+                <span style="color: black; font-weight: bold;">[ QR-KOODI AKTIIVINEN ]</span>
             </div>
         </div>
     </div>
 
     <div id="galleria" class="page">
         <h2>Kojun valokuvat</h2>
-        <p>Valokuvakojulla otetut kuvat ilmestyvät tänne reaaliajassa!</p>
+        <p>Valokuvakojulla otetut hassut otokset ilmestyvät tänne reaaliajassa.</p>
         <div class="gallery" id="photo-gallery">
-            <div style="height: 150px; background: #444; display:flex; align-items:center; justify-content:center;">Kuva 1</div>
-            <div style="height: 150px; background: #444; display:flex; align-items:center; justify-content:center;">Kuva 2</div>
+            <p>Odotellaan ensimmäisiä kuvia kojulta...</p>
         </div>
+    </div>
+
+    <div class="admin-panel">
+        <h3>⚙️ Testityökalut (Simuloi valokuvakojua ja uutisia)</h3>
+        <p style="font-size:12px; color:#aaa;">Tämä osio näkyy vain kehitysvaiheessa. Voit testata tästä toimiiko Firebase-yhteytesi.</p>
+        
+        <hr style="border-color:#444;">
+        
+        <h4>Luo feikkiuutinen livenä:</h4>
+        <input type="text" id="test-title" placeholder="Uutisen otsikko (esim. Apua!)">
+        <textarea id="test-text" placeholder="Uutisteksti..."></textarea>
+        <button onclick="sendTestNews()">Lähetä live-uutinen</button>
+        
+        <h4 style="margin-top:15px;">Simuloi valokuvakojun kuvaa:</h4>
+        <button onclick="sendTestPhoto()">Lähetä satunnainen testikuva galleriaan</button>
     </div>
 
 </div>
 
-<script>
-    // Välilehtien vaihto
-    function showPage(pageId) {
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Tammalahtirock 2026 konfiguraatio
+    const firebaseConfig = {
+        apiKey: "AIzaSyCBt38gSC3HTSqYb4OVTK6-LZz7Vi8r8Mg",
+        authDomain: "tammalahtirock2.firebaseapp.com",
+        projectId: "tammalahtirock2",
+        storageBucket: "tammalahtirock2.firebasestorage.app",
+        messagingSenderId: "376885311923",
+        appId: "1:376885311923:web:c7f0215004703e5676f3c6"
+    };
+
+    // Alustetaan Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Välilehtien vaihto navigaatiossa
+    window.showPage = function(pageId) {
         const pages = document.querySelectorAll('.page');
         const buttons = document.querySelectorAll('nav button');
-        
         pages.forEach(page => page.classList.remove('active'));
         buttons.forEach(btn => btn.classList.remove('active'));
-        
         document.getElementById(pageId).classList.add('active');
         document.getElementById('btn-' + pageId).classList.add('active');
     }
 
-    // Esimerkki: Feikkiuutisten simulointi (lisää uutisen 10 sekunnin välein)
-    const fakeNews = [
-        "Poliisi varoittaa: Alueella liikkuu erittäin huonoja puujalkavitsejä kertova mies.",
-        "VIP-alueen hanhet ovat aloittaneet lakon. Skumppaa ei tarjoilla ennen kuin maissintähdät on palautettu.",
-        "Löydetty: Yhden koon sukat. Omistajaa pyydetään noutamaan ne infopisteeltä jalassa."
-    ];
+    // 1. REAALIAIKAISET UUTISET (Kuuntelu)
+    const newsContainer = document.getElementById('news-container');
+    const newsQuery = query(collection(db, "uutiset"), orderBy("aika", "desc"));
 
-    setInterval(() => {
-        if(fakeNews.length > 0) {
-            const newsContainer = document.getElementById('news-container');
-            const randomNews = fakeNews.shift(); // Ottaa uutisen jonosta
-            
+    onSnapshot(newsQuery, (snapshot) => {
+        newsContainer.innerHTML = "";
+        if (snapshot.empty) {
+            newsContainer.innerHTML = "<p>Kaikki rauhallista Tammalahdessa. Ei uutisia juuri nyt...</p>";
+            return;
+        }
+        snapshot.forEach((doc) => {
+            const data = doc.data();
             const newsCard = document.createElement('div');
             newsCard.className = 'card news-flash';
-            newsCard.innerHTML = `<h3>🚨 Juuri nyt!</h3><p>${randomNews}</p>`;
-            
-            newsContainer.insertBefore(newsCard, newsContainer.firstChild);
+            newsCard.innerHTML = `<h3>${data.otsikko || '🚨 Ilmoitus'}</h3><p>${data.teksti || ''}</p>`;
+            newsContainer.appendChild(newsCard);
+        });
+    }, (error) => {
+        console.error("Virhe ladattaessa uutisia: ", error);
+        newsContainer.innerHTML = "<p style='color:red;'>Virhe ladattaessa uutisia. Tarkista Firebasen säännöt (Test Mode)!</p>";
+    });
+
+    // 2. REAALIAIKAINEN KUVAGALLERIA (Kuuntelu)
+    const galleryContainer = document.getElementById('photo-gallery');
+    const photosQuery = query(collection(db, "kuvat"), orderBy("aika", "desc"));
+
+    onSnapshot(photosQuery, (snapshot) => {
+        galleryContainer.innerHTML = "";
+        if (snapshot.empty) {
+            galleryContainer.innerHTML = "<p>Galleria on vielä tyhjä. Ota ensimmäinen kuva kojulla!</p>";
+            return;
         }
-    }, 10000); // 10 sekuntia
-</script>
-</body>
-</html>
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.kuva_url) {
+                const img = document.createElement('img');
+                img.src = data.kuva_url;
+                img.alt = "Kojukuva";
+                galleryContainer.appendChild(img);
+            }
+        });
+    });
+
+    // 3. ADMIN-TOIMINNOT TESTAAMISTA VARTEN
+    window.sendTestNews = async function() {
+        const otsikkoInput = document.getElementById('test-title');
+        const tekstiInput = document.getElementById('test-text');
+        
+        if(!otsikkoInput.value || !tekstiInput.value) {
+            alert("Täytä molemmat uutiskentät!");
+            return;
+        }
+
+        try {
+            await addDoc(collection(db, "uutiset"), {
+                otsikko: otsikkoInput.value,
+                teksti: tekstiInput.value,
+                aika: serverTimestamp()
+            });
+            otsikkoInput.
