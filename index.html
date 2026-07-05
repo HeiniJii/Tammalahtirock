@@ -13,19 +13,37 @@
             color: #ffffff;
         }
         
-        /* Joustava yläbanneri, joka näyttää KOKO kuvan ja kyltin */
+        /* Joustava yläbanneri cyberpunk-kuvalla (.png korjattu) */
         header {
-            background-image: linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(18,18,18,1) 100%), url('tammalahti_banner.png');
+            position: relative;
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0) 80%, rgba(18,18,18,1) 100%), url('tammalahti_banner.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center top;
             width: 100%;
-            aspect-ratio: 4 / 3; /* Pitää kuvasuhteen oikeana kaikilla laitteilla */
-            max-height: 500px; /* Estää venymästä liian suureksi tietokoneella */
+            aspect-ratio: 16 / 7;
+            max-height: 500px;
             background-color: #121212;
         }
 
-        /* Pysyvä navigaatiopalkki, joka pysyy aina näkyvissä ruudun yläosassa rullatessa */
+        /* Oikea reaaliaikainen laskuri kuvan tekstin päällä */
+        .countdown-overlay {
+            position: absolute;
+            top: 4.8%;
+            left: 17.8%;
+            color: #ff007f;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2vw;
+            font-weight: bold;
+            text-shadow: 0 0 8px #ff007f, 0 0 20px #ff007f;
+            z-index: 10;
+            pointer-events: none;
+            letter-spacing: 1px;
+            background-color: #0b0214;
+            padding: 0 2px;
+        }
+
+        /* Pysyvä navigaatiopalkki */
         nav {
             position: -webkit-sticky; /* Safari */
             position: sticky;
@@ -37,7 +55,7 @@
             border-bottom: 2px solid #ff007f;
             overflow-x: auto;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            margin-top: -5px; /* Hieno häivytys kuvan ja navigaation välille */
+            margin-top: -5px;
         }
         
         nav button {
@@ -133,14 +151,22 @@
         .my-stamps {
             margin-top: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; text-align: left;
         }
+        
+        @media (min-width: 1000px) {
+            .countdown-overlay {
+                font-size: 20px;
+                top: 24px;
+                left: 178px;
+            }
+        }
     </style>
 </head>
 <body>
 
-<!-- Paksu ja joustava yläbanneri kuvalle -->
-<header></header>
+<header>
+    <div class="countdown-overlay" id="rave-countdown">00:00:00</div>
+</header>
 
-<!-- Pysyvä navigaatiopalkki -->
 <nav>
     <button onclick="showPage('koti')" id="btn-koti" class="active">Etusivu</button>
     <button onclick="showPage('kartta')" id="btn-kartta">Aluekartta</button>
@@ -151,13 +177,11 @@
 
 <div class="container">
 
-    <!-- ETUSIVU & UUTISET -->
     <div id="koti" class="page active">
         <h2>Live-uutiset (AI-Newsroom)</h2>
         <div id="news-container">Päivitetään uutisia...</div>
     </div>
 
-    <!-- KARTTA & OHJELMA -->
     <div id="kartta" class="page">
         <h2>Aluekartta</h2>
         <div class="card">
@@ -172,7 +196,6 @@
         <div class="card"><h3>20:00 - Mysteeriartisti X</h3><p>Telttalava</p></div>
     </div>
 
-    <!-- DIGITAALINEN PASSI -->
     <div id="passi" class="page">
         <h2>Digitaalinen Festaripassi</h2>
         <div class="pass">
@@ -193,7 +216,6 @@
         </div>
     </div>
 
-    <!-- KUVAGALLERIA -->
     <div id="galleria" class="page">
         <h2>Kaikkien yhteinen kuvaseinä</h2>
         <p>Festarikansan parhaat otokset livenä.</p>
@@ -218,7 +240,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Nimigeneraattori festarinimelle
     const etuliitteet = ["DJ", "Kapteeni", "Kuningas", "Lady", "Herra", "Tohtori", "Iso", "Pikku", "Ylipäällikkö", "Metsän"];
     const keskiosat = ["Glitter", "Crocs", "Tölkki", "Sauna", "Makkara", "Disco", "Hyttynen", "Nuotio", "Basso", "Kimallus"];
     const loput = ["Keisari", "Noita", "Ninja", "Mestari", "Ruhtinas", "Velho", "Kulkija", "Sankari", "Tietäjä", "Tuhooja"];
@@ -230,89 +251,33 @@
     const myFestariNimi = localStorage.getItem('festariNimiID');
     document.getElementById('festival-name-display').innerText = myFestariNimi;
 
-    window.showPage = function(pageId) {
-        const pages = document.querySelectorAll('.page');
-        const buttons = document.querySelectorAll('nav button');
-        pages.forEach(page => page.classList.remove('active'));
-        buttons.forEach(btn => btn.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        document.getElementById('btn-' + pageId).classList.add('active');
+    // --- REAALIAIKAINEN LASKURI ---
+    const alkamisaika = new Date("July 17, 2026 14:00:00").getTime();
+    const paattymisaika = new Date("July 19, 2026 23:59:59").getTime();
+    const countdownElement = document.getElementById("rave-countdown");
 
-        if(pageId === 'passi') {
-            if(localStorage.getItem('suoritus_kamera')) document.getElementById('stamp-kamera').className = "stamp-box checked";
-            if(localStorage.getItem('suoritus_glitter')) document.getElementById('stamp-glitter').className = "stamp-box checked";
-            if(localStorage.getItem('suoritus_kohtalo')) document.getElementById('stamp-kohtalo').className = "stamp-box checked";
+    function updateCountdown() {
+        const nyt = new Date().getTime();
+        
+        if (nyt < alkamisaika) {
+            const erotus = alkamisaika - nyt;
+            const paivat = Math.floor(erotus / (1000 * 60 * 60 * 24));
+            const tunnit = Math.floor((erotus % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minuutit = Math.floor((erotus % (1000 * 60 * 60)) / (1000 * 60));
+            const sekunnit = Math.floor((erotus % (1000 * 60)) / 1000);
+            
+            const fTunnit = String(tunnit + (paivat * 24)).padStart(2, '0');
+            const fMinuutit = String(minuutit).padStart(2, '0');
+            const fSekunnit = String(sekunnit).padStart(2, '0');
+            
+            countdownElement.innerText = `${fTunnit}:${fMinuutit}:${fSekunnit}`;
+        } else if (nyt >= alkamisaika && nyt <= paattymisaika) {
+            countdownElement.innerText = "⚡LIVE⚡";
+        } else {
+            countdownElement.innerText = "OFFLN";
         }
     }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
 
-    // AI-FEIKKIUUTISET (Päivittyy aikataulun mukaan)
-    const tekoalyUutiset = [
-        { tunti: 14, otsikko: "🚨 Porttikaaos peruttu!", teksti: "Portit avattiin klo 14:00. Ensimmäinen vieras yritti tuoda festarialueelle lemmikkisammakkoa, sammakko käännytettiin takaisin." },
-        { tunti: 16, otsikko: "⚠️ Hälytys ruokakojulla", teksti: "Makkaranpaistopisteen ylle kerääntyi ennätysmäinen 4000 hyttysen pilvi. Festarikansaa pyydetään tanssimaan nopeammin hyttysten hämäämiseksi." },
-        { tunti: 18, otsikko: "⭐ VIP-alueen kuulumisia", teksti: "Tuntematon rokkari on juuri bongattu jonottamassa bajamajaan VIP-passi väärinpäin kaulassa. Huhut kertovat kyseessä olleen salep-julkkis." },
-        { tunti: 20, otsikko: "🔥 Päälavan mysteeri", teksti: "Bändin basistin basso katosi. Se löytyi 10 minuuttia myöhemmin festarialueen saunan lauteilta lämmittelemästä." },
-        { tunti: 22, otsikko: "🌌 Glitter-kriisi!", teksti: "Festarialueen glittervarastot uhkaavat loppua kesken. Ylipäälliköt kehoittavat säästeliääseen kimaltelemiseen yön pikkutunneilla." }
-    ];
-
-    function paivitaUutiset() {
-        const newsContainer = document.getElementById('news-container');
-        newsContainer.innerHTML = "";
-        const nykyinenTunti = new Date().getHours();
-        let uutisiaNaytetty = 0;
-
-        tekoalyUutiset.forEach(u => {
-            if (nykyinenTunti >= u.tunti || nykyinenTunti < 6) {
-                const card = document.createElement('div');
-                card.className = 'card news-flash';
-                card.innerHTML = `<h3>${u.otsikko}</h3><p>${u.teksti}</p>`;
-                newsContainer.appendChild(card);
-                uutisiaNaytetty++;
-            }
-        });
-        if(uutisiaNaytetty === 0) {
-            newsContainer.innerHTML = "<p>Tammalahtirock 2026 on alkanut rauhallisesti! Odotellaan uutisia uutishuoneesta...</p>";
-        }
-    }
-    paivitaUutiset();
-    setInterval(paivitaUutiset, 60000);
-
-    // Kuvagalleria (Reaaliaikainen seuranta Firebasesta)
-    const galleryContainer = document.getElementById('photo-gallery');
-    const myGalleryContainer = document.getElementById('my-photo-gallery');
-
-    onSnapshot(query(collection(db, "kuvat"), orderBy("aika", "desc")), (snapshot) => {
-        galleryContainer.innerHTML = ""; myGalleryContainer.innerHTML = "";
-        let hasMyPhotos = false;
-
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            if (data.kuva_url) {
-                const item = document.createElement('div');
-                item.className = 'gallery-item';
-                const img = document.createElement('img'); img.src = data.kuva_url;
-                const tag = document.createElement('div'); tag.className = 'author-tag';
-                tag.innerText = (data.tyyppi === 'glitter' ? "✨ " : "📸 ") + data.tekija_nimi;
-                item.appendChild(img); item.appendChild(tag);
-                galleryContainer.appendChild(item);
-
-                if (data.tekija_nimi === myFestariNimi) {
-                    hasMyPhotos = true;
-                    if (data.tyyppi === 'glitter') {
-                        localStorage.setItem('suoritus_glitter', 'true');
-                    } else {
-                        localStorage.setItem('suoritus_kamera', 'true');
-                        document.getElementById('stamp-kamera').className = "stamp-box checked";
-                    }
-                    
-                    const myItem = document.createElement('div'); myItem.className = 'gallery-item';
-                    const myImg = document.createElement('img'); myImg.src = data.kuva_url;
-                    myItem.appendChild(myImg); myGalleryContainer.appendChild(myItem);
-                }
-            }
-        });
-        if (galleryContainer.innerHTML === "") galleryContainer.innerHTML = "<p>Ei kuvia.</p>";
-        if (!hasMyPhotos) myGalleryContainer.innerHTML = "<p>Ei omia kuvia vielä.</p>";
-    });
-</script>
-</body>
-</html>
+    window.showPage =
