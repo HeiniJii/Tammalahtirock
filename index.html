@@ -69,7 +69,7 @@
             transition: all 0.3s ease;
             white-space: nowrap;
             font-weight: bold;
-            border-radius: 20px; /* Pehmennetyt reunat */
+            border-radius: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
         
@@ -77,7 +77,7 @@
             background-color: #ff007f;
             color: white;
             border-color: #ff007f;
-            box-shadow: 0 0 12px #ff007f, 0 0 5px #00f0ff; /* Kyber-varjostus hehkulla */
+            box-shadow: 0 0 12px #ff007f, 0 0 5px #00f0ff;
             transform: translateY(-1px);
         }
 
@@ -116,6 +116,46 @@
         
         .news-flash { border-left-color: #ffcc00; }
         
+        /* Sää-korttien tyylit */
+        .weather-card {
+            border-left-color: #00f0ff;
+            background: linear-gradient(135deg, #150d22 0%, #0d1b2a 100%);
+        }
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .weather-day {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid rgba(0,240,255,0.1);
+        }
+        .weather-day h4 { margin: 0 0 5px 0; color: #ff007f; }
+        .weather-btn {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid #00f0ff;
+            color: #00f0ff;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            transition: 0.2s;
+            margin-right: 10px;
+            margin-top: 5px;
+        }
+        .weather-btn:hover {
+            background: #00f0ff;
+            color: #0b0214;
+            box-shadow: 0 0 10px #00f0ff;
+        }
+
         .pass {
             background: linear-gradient(45deg, #ff007f, #7928ca);
             padding: 30px;
@@ -127,7 +167,6 @@
         
         .festival-name { font-size: 26px; font-weight: bold; margin: 15px 0; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         
-        /* Kartan muotoilu */
         .map-wrapper {
             width: 100%;
             border-radius: 8px;
@@ -136,139 +175,41 @@
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
             background-color: #150d22;
         }
-        .map-wrapper img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
+        .map-wrapper img { width: 100%; height: auto; display: block; }
 
-        /* AIKATAULUKKO / LUKUJÄRJESTYS GRID-TYYLILLÄ */
-        .schedule-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        /* AIKATAULUKKO GRID */
+        .schedule-controls { display: flex; gap: 10px; margin-bottom: 20px; }
         .schedule-controls button {
-            flex: 1;
-            background: #150d22;
-            border: 1px solid #00f0ff;
-            color: #00f0ff;
-            padding: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.2s;
+            flex: 1; background: #150d22; border: 1px solid #00f0ff; color: #00f0ff;
+            padding: 10px; font-weight: bold; cursor: pointer; border-radius: 8px; transition: 0.2s;
         }
-        .schedule-controls button.active {
-            background: #00f0ff;
-            color: #0b0214;
-            box-shadow: 0 0 10px #00f0ff;
-        }
+        .schedule-controls button.active { background: #00f0ff; color: #0b0214; box-shadow: 0 0 10px #00f0ff; }
 
         .schedule-section { display: none; }
         .schedule-section.active { display: block; }
 
-        .day-title {
-            color: #ff007f;
-            font-weight: bold;
-            margin: 20px 0 10px 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 16px;
-        }
+        .day-title { color: #ff007f; font-weight: bold; margin: 20px 0 10px 0; text-transform: uppercase; letter-spacing: 1px; font-size: 16px; }
 
-        .grid-timetable {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .grid-row {
-            display: grid;
-            grid-template-columns: 80px 1fr 120px;
-            background: #170e28;
-            border: 1px solid rgba(255, 0, 127, 0.15);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .grid-row.header-row {
-            background: rgba(255, 0, 127, 0.2);
-            border-color: #ff007f;
-            font-weight: bold;
-            color: #ff007f;
-        }
-        .grid-cell {
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-        }
-        .grid-cell.time {
-            background: rgba(0, 240, 255, 0.05);
-            color: #00f0ff;
-            font-family: monospace;
-            justify-content: center;
-            border-right: 1px solid rgba(0, 240, 255, 0.15);
-        }
-        .grid-cell.who {
-            color: #ffcc00;
-            font-style: italic;
-            justify-content: flex-end;
-            text-align: right;
-        }
+        .grid-timetable { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 20px; }
+        .grid-row { display: grid; grid-template-columns: 80px 1fr 120px; background: #170e28; border: 1px solid rgba(255, 0, 127, 0.15); border-radius: 6px; overflow: hidden; }
+        .grid-row.header-row { background: rgba(255, 0, 127, 0.2); border-color: #ff007f; font-weight: bold; color: #ff007f; }
+        .grid-cell { padding: 10px; display: flex; align-items: center; font-size: 14px; }
+        .grid-cell.time { background: rgba(0, 240, 255, 0.05); color: #00f0ff; font-family: monospace; justify-content: center; border-right: 1px solid rgba(0, 240, 255, 0.15); }
+        .grid-cell.who { color: #ffcc00; font-style: italic; justify-content: flex-end; text-align: right; }
 
-        /* Kuvagalleria */
+        /* Galleria */
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-        .gallery-item {
-            position: relative;
-            height: 140px;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #333;
-            border: 1px solid rgba(255,0,127,0.2);
-        }
+        .gallery-item { position: relative; height: 140px; border-radius: 8px; overflow: hidden; background-color: #333; border: 1px solid rgba(255,0,127,0.2); }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
-        .gallery-item .author-tag {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: rgba(11, 2, 20, 0.85);
-            color: #00f0ff;
-            font-size: 10px;
-            padding: 4px;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+        .gallery-item .author-tag { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(11, 2, 20, 0.85); color: #00f0ff; font-size: 10px; padding: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
         .stamps-grid { display: flex; justify-content: space-around; margin: 20px 0; gap: 10px; }
-        .stamp-box {
-            background: rgba(0,0,0,0.4);
-            padding: 10px;
-            border-radius: 10px;
-            flex: 1;
-            font-size: 12px;
-            border: 2px dashed #aaa;
-            text-align: center;
-        }
-        .stamp-box.checked {
-            border-color: #00f0ff;
-            background: rgba(0, 240, 255, 0.2);
-            font-weight: bold;
-            box-shadow: 0 0 8px #00f0ff;
-        }
-        .my-stamps {
-            margin-top: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; text-align: left;
-        }
+        .stamp-box { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 10px; flex: 1; font-size: 12px; border: 2px dashed #aaa; text-align: center; }
+        .stamp-box.checked { border-color: #00f0ff; background: rgba(0, 240, 255, 0.2); font-weight: bold; box-shadow: 0 0 8px #00f0ff; }
+        .my-stamps { margin-top: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; text-align: left; }
         
-        @media (min-width: 1000px) {
-            .countdown-overlay { font-size: 20px; top: 24px; left: 178px; }
-        }
-        @media (max-width: 500px) {
-            .grid-row { grid-template-columns: 65px 1fr 90px; }
-            .grid-cell { font-size: 12px; padding: 6px; }
-        }
+        @media (min-width: 1000px) { .countdown-overlay { font-size: 20px; top: 24px; left: 178px; } }
+        @media (max-width: 500px) { .grid-row { grid-template-columns: 65px 1fr 90px; } .grid-cell { font-size: 12px; padding: 6px; } }
     </style>
 </head>
 <body>
@@ -287,11 +228,31 @@
 
 <div class="container">
 
+    <!-- ETUSIVU & UUTISET & SÄÄ -->
     <div id="koti" class="page active">
+        
+        <!-- SÄÄENNUSTEKORTTI (Kontiolahti / Kontioniemi) -->
+        <div class="card weather-card">
+            <h3>☀️ Tammalahtirock Säätila (Kontiolahti)</h3>
+            <p style="font-size: 13px; opacity: 0.8; margin-bottom: 10px;">Ennuste Lemmenpoluntien lähimmälle sääasemalle viikonlopuksi 16.7. – 19.7.2026:</p>
+            
+            <div class="weather-grid">
+                <div class="weather-day"><h4>To 16.7.</h4><p style="font-size:12px;margin:5px 0;">Talkoot</p><span style="color:#00f0ff;font-weight:bold;">Katso livenä</span></div>
+                <div class="weather-day"><h4>Pe 17.7.</h4><p style="font-size:12px;margin:5px 0;">Time to Rave</p><span style="color:#00f0ff;font-weight:bold;">Katso livenä</span></div>
+                <div class="weather-day"><h4>La 18.7.</h4><p style="font-size:12px;margin:5px 0;">Showtime</p><span style="color:#00f0ff;font-weight:bold;">Katso livenä</span></div>
+                <div class="weather-day"><h4>Su 19.7.</h4><p style="font-size:12px;margin:5px 0;">Brunssi</p><span style="color:#00f0ff;font-weight:bold;">Katso livenä</span></div>
+            </div>
+
+            <!-- Ilmatieteen laitoksen suorat kohdistetut linkit -->
+            <a href="https://www.ilmatieteenlaitos.fi/saa/kontiolahti/kontioniemi" target="_blank" class="weather-btn">📊 Avaa 10vrk Ennuste</a>
+            <a href="https://www.ilmatieteenlaitos.fi/sade-ja-pilvitilat" target="_blank" class="weather-btn">📡 Avaa Livenä Sadetutka</a>
+        </div>
+
         <h2>Live-uutiset (AI-Newsroom)</h2>
         <div id="news-container">Päivitetään uutisia...</div>
     </div>
 
+    <!-- ALUEKARTTA -->
     <div id="kartta" class="page">
         <h2>Aluekartta</h2>
         <div class="map-wrapper">
@@ -299,9 +260,9 @@
         </div>
     </div>
     
+    <!-- AIKATAULUT -->
     <div id="ohjelma" class="page">
         <h2>Festivaaliaikataulut</h2>
-        
         <div class="schedule-controls">
             <button id="tab-festari" class="active" onclick="switchSchedule('festari')">🎸 FESTARIAIKATAULU</button>
             <button id="tab-nakkilista" onclick="switchSchedule('nakkilista')">📋 NAKKILISTA</button>
@@ -315,7 +276,6 @@
                 <div class="grid-row"><div class="grid-cell time">18:00</div><div class="grid-cell">Avajaisseremonia</div><div class="grid-cell who">Päälava</div></div>
                 <div class="grid-row"><div class="grid-cell time">21:00</div><div class="grid-cell">Tammalahti All Stars Live</div><div class="grid-cell who">Päälava</div></div>
             </div>
-
             <div class="day-title">Lauantai 18.7.2026</div>
             <div class="grid-timetable">
                 <div class="grid-row header-row"><div class="grid-cell">Aika</div><div class="grid-cell">Ohjelma / Esiintyjä</div><div class="grid-cell" style="justify-content:flex-end;">Lava</div></div>
@@ -334,7 +294,6 @@
                 <div class="grid-row"><div class="grid-cell time">1 h</div><div class="grid-cell">Jääkaapin haku?</div><div class="grid-cell who">-</div></div>
                 <div class="grid-row"><div class="grid-cell time">1 h</div><div class="grid-cell">Yhteisalkoholihankinnat</div><div class="grid-cell who">Opa</div></div>
             </div>
-
             <div class="day-title">Torstai 16.7.2026</div>
             <div class="grid-timetable">
                 <div class="grid-row"><div class="grid-cell time">16:00</div><div class="grid-cell">Makkara-ainesten nouto, Ylämylly (0.5h)</div><div class="grid-cell who">Opa</div></div>
@@ -344,7 +303,6 @@
                 <div class="grid-row"><div class="grid-cell time">Ruoka</div><div class="grid-cell">Talkooillallinen (1h)</div><div class="grid-cell who">-</div></div>
                 <div class="grid-row"><div class="grid-cell time">Grilli</div><div class="grid-cell">Grillimestari (1h)</div><div class="grid-cell who">-</div></div>
             </div>
-
             <div class="day-title">Perjantai 17.7.2026</div>
             <div class="grid-timetable">
                 <div class="grid-row"><div class="grid-cell time">Lounas</div><div class="grid-cell">Lounaan teko (1h) & siivous (0.5h)</div><div class="grid-cell who">-</div></div>
@@ -357,10 +315,7 @@
                 <div class="grid-row"><div class="grid-cell time">Bändi</div><div class="grid-cell">Tammalahti All Stars, yhtye</div><div class="grid-cell who">Agata</div></div>
                 <div class="grid-row"><div class="grid-cell time">Yleisö</div><div class="grid-cell">Tammalahti All Stars, yleisö</div><div class="grid-cell who">Heini, Samu</div></div>
                 <div class="grid-row"><div class="grid-cell time">Koju</div><div class="grid-cell">Lävistyskoju yms. alueohjelma</div><div class="grid-cell who">Heini</div></div>
-                <div class="grid-row"><div class="grid-cell time">Yö</div><div class="grid-cell">Iltapala/yöpalan teko & siivous ????</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Yö</div><div class="grid-cell">Yösauna ????</div><div class="grid-cell who">-</div></div>
             </div>
-
             <div class="day-title">Lauantai 18.7.2026</div>
             <div class="grid-timetable">
                 <div class="grid-row"><div class="grid-cell time">Aamu</div><div class="grid-cell">Aamusauna (1h)</div><div class="grid-cell who">Agata, Samu</div></div>
@@ -372,7 +327,6 @@
                 <div class="grid-row"><div class="grid-cell time">Grilli</div><div class="grid-cell">Grillimestari (1h)</div><div class="grid-cell who">-</div></div>
                 <div class="grid-row"><div class="grid-cell time">Sauna</div><div class="grid-cell">Yösauna (1h)</div><div class="grid-cell who">-</div></div>
             </div>
-
             <div class="day-title">Sunnuntai 19.7.2026</div>
             <div class="grid-timetable">
                 <div class="grid-row"><div class="grid-cell time">Aamu</div><div class="grid-cell">Aamusauna (1h)</div><div class="grid-cell who">-</div></div>
@@ -385,6 +339,7 @@
         </div>
     </div>
 
+    <!-- DIGITAALINEN PASSI -->
     <div id="passi" class="page">
         <h2>Digitaalinen Festaripassi</h2>
         <div class="pass">
@@ -405,6 +360,7 @@
         </div>
     </div>
 
+    <!-- KUVAGALLERIA -->
     <div id="galleria" class="page">
         <h2>Kaikkien yhteinen kuvaseinä</h2>
         <p>Festarikansan parhaat otokset livenä.</p>
