@@ -74,7 +74,7 @@
         .stamp-box.checked { border-color: #00f0ff; background: rgba(0, 240, 255, 0.2); font-weight: bold; box-shadow: 0 0 8px #00f0ff; }
         .my-stamps { margin-top: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; text-align: left; }
         
-        /* Chättilaatikon tyylit */
+        /* Chätti */
         .chat-card { background: #18092b; border: 2px solid #ff007f; border-radius: 12px; padding: 15px; margin-top: 25px; box-shadow: 0 0 15px rgba(255, 0, 127, 0.3); }
         .chat-box { height: 180px; overflow-y: auto; background: rgba(0,0,0,0.4); border-radius: 8px; padding: 10px; margin-bottom: 10px; text-align: left; font-size: 14px; border: 1px solid rgba(0, 240, 255, 0.1); }
         .msg { margin-bottom: 8px; line-height: 1.4; }
@@ -150,7 +150,6 @@
             <button id="tab-nakkilista" onclick="switchSchedule('nakkilista')">📋 NAKKILISTA</button>
         </div>
         
-        <!-- FESTARIAIKATAULU-OSIO -->
         <div id="section-festari" class="schedule-section active">
             <div class="day-title">Perjantai 17.7.2026</div>
             <div class="grid-timetable">
@@ -295,19 +294,17 @@
     }
     window.switchSchedule = switchSchedule;
 
-    // ANDYN CHAT-ÄLY (Tapa 1)
+    // ANDYN CHAT-ÄLY
     function sendToAndy() {
         const input = document.getElementById('chat-field');
         const box = document.getElementById('andy-chat-box');
         const teksti = input.value.trim();
         if(!teksti) return;
 
-        // Lisätään käyttäjän viesti ruudulle
         box.innerHTML += `<div class="msg user"><b>Sinä:</b> ${teksti}</div>`;
         input.value = "";
         box.scrollTop = box.scrollHeight;
 
-        // Avainsanavastaukset
         const t = teksti.toLowerCase();
         let vastaus = "";
         
@@ -315,7 +312,7 @@
             "You know, elämä on herkkää, mut rock'n'roll on ikuista. Älä stressaa liikaa, läbä läbä!",
             "Mä oon nähny kaiken, you know, New Yorkista Kontiolahteen. Täällä on parhaat vibat, man!",
             "Hei, don't worry about it! Seuraa vaan sun sydäntäs ja pidä hattu suorassa.",
-            "Tosi rokkari ei selittele. Me vaan tehään tää juttu, you know? Kysy mitä vaan, mä oon sheriffi!",
+            "Tosi rokkari ei selittele. Me vaan tehään tää juttu, you know? Kыsy mitä vaan, mä oon rock-kuningas!",
             "Luoja loi musiikin ja mä hoidan loput, läbä läbä. Make some noise!",
             "You know, mä oon asunu intiaanien kanssa ja soittanu maailman suurimmilla lavoilla, mut tää Tammalahti... tää on se real deal."
         ];
@@ -331,11 +328,9 @@
         } else if(t.includes('kuka') || t.includes('nimi') || t.includes('sinä')) {
             vastaus = "Mähän sanoin jo, mä oon Andy McCoy, the one and only rock-kuningas! Don't you forget it, you know!";
         } else {
-            // Jos ei osumia, arvotaan yleisistä
             vastaus = yleiset[Math.floor(Math.random() * yleiset.length)];
         }
 
-        // Andyn viive-vastaus (näyttää aidommalta)
         setTimeout(() => {
             box.innerHTML += `<div class="msg andy"><b>Andy McCoy:</b> ${vastaus}</div>`;
             box.scrollTop = box.scrollHeight;
@@ -359,6 +354,73 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Kello & Automaattinen uutistoimisto
+    const alkamisaika = new Date("July 17, 2026 14:00:00").getTime();
+    const paattymisaika = new Date("July 19, 2026 23:59:59").getTime();
+    const countdownElement = document.getElementById("rave-countdown");
+
+    // Höpö-uutispankki (Vain sallituilla henkilöillä)
+    const uutiset = [
+        { otsikko: "🚨 UUTISSALAMA: Opa bongattu surmahumalassa etuajassa!", kuvaus: "Silminnäkijähavaintojen mukaan Opa on aloittanut virallisen nesteytyksen jo ennen talkoiden alkamista. 'Hän vain mutisi jotain makkaroista', nimettömänä pysyvä festarivieras kertoo.", tunti: -12 },
+        { otsikko: "🔮 KOHTALON KÄÄNNE: Agata otti komennon pihatalkoissa", kuvaus: "Agata on nimitetty talkoiden ylikomentajaksi. Raporttien mukaan haravat heiluvat Kontiolahdella sellaista vauhtia, että heikompaa hirvittää. Juha on määrätty välittömästi erikoistehtäviin.", tunti: -4 },
+        { otsikko: "📋 NAKKIKRIISI: Teemu ja Antti katosivat Prisman parkkipaikalla", kuvaus: "Teemu ja Antti lähetettiin hakemaan virvokkeita, mutta kaksikko on havaittu viimeksi pohtimassa Prisma Joensuun sipsihyllyjen strategista sijoittelua. Susanna on lähetetty etsintäpartioon.", tunti: 0 },
+        { otsikko: "✨ GLITTER-VAROITUS: Heini räjäytti kimalluspisteen", kuvaus: "Festaripassin glitterkoju on virallisesti avattu! Heini asetti uuden alue-ennätyksen: yli puolet Kontiolahden hyttysistä on nyt päällystetty strasseilla. Maiju ja Saara harkitsevat suojalasien käyttöä.", tunti: 2 },
+        { otsikko: "🎸 ÄÄNIVALLI RIKKI: Juha aloitti soundcheckin", kuvaus: "Musiikillinen johto Juha on kytkenyt basson vahvistimeen. Äänenpaine oli niin kova, että Samun hattu lensi päästä rannalla asti. Sanna kommentoi tilannetta ytimekkäästi: 'Täydellistä.'", tunti: 5 },
+        { otsikko: "🥞 BRUNSSIKAPINA: Satu ja Tapio ottivat grillin haltuun", kuvaus: "Satu ja Tapio ovat julistautuneet alueen virallisiksi keittiömestareiksi. Huhujen mukaan makkaroita käännetään nyt tiukan aikataulun mukaan sekuntikellolla. Opa hyväksyy tilanteen täysin.", tunti: 10 },
+        { otsikko: "🎭 ALUEUUTINEN: Samu ja Saara suorittivat täydellisen synkronisukelluksen", kuvaus: "Samu ja Saara nähtiin loikkaamassa laiturilta täydellisessä muodostelmassa suoraan Kontiolahden aaltoihin. Tapio antoi suorituksesta täydet 10 pistettä.", tunti: 16 },
+        { otsikko: "🛸 MYSTEERI: Kuka söi yöpalat?", kuvaus: "Viime yönä tapahtunut mystinen iltapalahävikki puhuttaa. Epäilyksen varjo lankeaa vahvasti Antin ja Teemun suuntaan, mutta Heini ja Maiju kieltäytyvät todistamasta ystäviään vastaan.", tunti: 22 }
+    ];
+
+    function paivitaUutiset() {
+        const nyt = new Date().getTime();
+        const erotusTunteina = Math.floor((nyt - alkamisaika) / (1000 * 60 * 60));
+        
+        const newsContainer = document.getElementById('news-container');
+        if (!newsContainer) return;
+
+        // Vapautetaan uutisia sen mukaan, paljonko tunteja on kulunut alkamisesta
+        let naytettavat = uutiset.filter(u => erotusTunteina >= u.tunti);
+        
+        // Jos festarit eivät ole vielä lähelläkään, näytetään aina vähintään kaksi ensimmäistä talkouutista (Opa ja Agata) kestona
+        if(naytettavat.length < 2) {
+            naytettavat = [uutiset[0], uutiset[1]];
+        }
+
+        // Käännetään järjestys niin, että uusin uutinen on ylimpänä
+        naytettavat.reverse();
+
+        let html = "";
+        naytettavat.forEach(u => {
+            html += `
+                <div class="card news-flash">
+                    <h3 style="color:#ffcc00; margin-top:0;">${u.otsikko}</h3>
+                    <p style="font-size:14px; margin-bottom:0; line-height:1.5; color:#eee;">${u.kuvaus}</p>
+                </div>
+            `;
+        });
+        newsContainer.innerHTML = html;
+    }
+
+    function updateCountdown() {
+        const nyt = new Date().getTime();
+        if (nyt < alkamisaika) {
+            const erotus = alkamisaika - nyt;
+            const paivat = Math.floor(erotus / (1000 * 60 * 60 * 24));
+            const tunnit = Math.floor((erotus % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minuutit = Math.floor((erotus % (1000 * 60 * 60)) / (1000 * 60));
+            const sekunnit = Math.floor((erotus % (1000 * 60)) / 1000);
+            countdownElement.innerText = `${String(tunnit + (paivat * 24)).padStart(2,'0')}:${String(minuutit).padStart(2,'0')}:${String(sekunnit).padStart(2,'0')}`;
+        } else if (nyt >= alkamisaika && nyt <= paattymisaika) {
+            countdownElement.innerText = "⚡LIVE⚡";
+        } else {
+            countdownElement.innerText = "OFFLN";
+        }
+    }
+    
+    // Ajetaan kellon ja uutisten päivitykset rullamaan
+    setInterval(updateCountdown, 1000); updateCountdown();
+    setInterval(paivitaUutiset, 60000); paivitaUutiset();
+
     function generoiLaiteKoodi() {
         const osat = [
             navigator.userAgent,
@@ -377,54 +439,8 @@
         return Math.abs(hash);
     }
 
-    const etuliitteet = ["DJ", "Kapteeni", "Kuningas", "Lady", "Herra", "Tohtori", "Iso", "Pikku", "Ylipäällikkö", "Metsän"];
-    const keskiosat = ["Glitter", "Crocs", "Tölkki", "Sauna", "Makkara", "Disco", "Hyttynen", "Nuotio", "Basso", "Kimallus"];
-    const loput = ["Keisari", "Noita", "Ninja", "Mestari", "Ruhtinas", "Velho", "Kulkija", "Sankari", "Tietäjä", "Tuhooja"];
-
-    const urlParams = new URLSearchParams(window.location.search);
-    let myFestariNimi = urlParams.get('nimi');
-
-    if (myFestariNimi) {
-        localStorage.setItem('festariNimiID', myFestariNimi);
-    } else {
-        myFestariNimi = localStorage.getItem('festariNimiID');
-        if (!myFestariNimi) {
-            const laiteKoodi = generoiLaiteKoodi();
-            const i1 = laiteKoodi % etuliitteet.length;
-            const i2 = (laiteKoodi >> 2) % keskiosat.length;
-            const i3 = (laiteKoodi >> 4) % loput.length;
-            
-            myFestariNimi = `${etuliitteet[i1]} ${keskiosat[i2]} ${loput[i3]}`;
-            localStorage.setItem('festariNimiID', myFestariNimi);
-        }
-    }
-    
-    document.getElementById('festival-name-display').innerText = myFestariNimi;
-
-    // Kello
-    const alkamisaika = new Date("July 17, 2026 14:00:00").getTime();
-    const paattymisaika = new Date("July 19, 2026 23:59:59").getTime();
-    const countdownElement = document.getElementById("rave-countdown");
-
-    function updateCountdown() {
-        const nyt = new Date().getTime();
-        if (nyt < alkamisaika) {
-            const erotus = alkamisaika - nyt;
-            const paivat = Math.floor(erotus / (1000 * 60 * 60 * 24));
-            const tunnit = Math.floor((erotus % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minuutit = Math.floor((erotus % (1000 * 60 * 60)) / (1000 * 60));
-            const sekunnit = Math.floor((erotus % (1000 * 60)) / 1000);
-            countdownElement.innerText = `${String(tunnit + (paivat * 24)).padStart(2,'0')}:${String(minuutit).padStart(2,'0')}:${String(sekunnit).padStart(2,'0')}`;
-        } else if (nyt >= alkamisaika && nyt <= paattymisaika) {
-            countdownElement.innerText = "⚡LIVE⚡";
-        } else {
-            countdownElement.innerText = "OFFLN";
-        }
-    }
-    setInterval(updateCountdown, 1000); updateCountdown();
-
-    const newsContainer = document.getElementById('news-container');
-    if(newsContainer) newsContainer.innerHTML = `<div class="card news-flash"><h3>🚨 Linjat auki!</h3><p>Tietokantayhteys aktivoitu nimelle: <b>${myFestariNimi}</b>. Skannaa kojujen QR-koodit täyttääksesi passin!</p></div>`;
+    const myFestariNimi = localStorage.getItem('festariNimiID');
+    document.getElementById('festival-name-display').innerText = myFestariNimi || "Festarivieras";
 
     if (localStorage.getItem('suoritus_kohtalo') === 'true') {
         if(document.getElementById('stamp-kohtalo')) document.getElementById('stamp-kohtalo').className = "stamp-box checked";
