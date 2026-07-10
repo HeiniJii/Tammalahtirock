@@ -48,7 +48,7 @@
         .page.active { display: block; }
         h2 { color: #00f0ff; text-shadow: 0 0 8px rgba(0, 240, 255, 0.5); border-bottom: 1px solid rgba(0, 240, 255, 0.2); padding-bottom: 8px; margin-top: 0; }
         .card { background-color: #150d22; padding: 20px; margin-bottom: 15px; border-radius: 8px; border-left: 5px solid #00f0ff; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
-        .news-flash { border-left-color: #ffcc00; }
+        .news-flash { border-left-color: #00f0ff; }
         .pass { background: linear-gradient(45deg, #ff007f, #7928ca); padding: 30px; text-align: center; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
         .festival-name { font-size: 26px; font-weight: bold; margin: 15px 0; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .map-wrapper { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #00f0ff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); background-color: #150d22; }
@@ -73,9 +73,6 @@
         .stamp-box { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 10px; flex: 1; font-size: 12px; border: 2px dashed #aaa; text-align: center; }
         .stamp-box.checked { border-color: #00f0ff; background: rgba(0, 240, 255, 0.2); font-weight: bold; box-shadow: 0 0 8px #00f0ff; }
         .my-stamps { margin-top: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; text-align: left; }
-        .koju-linkit { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
-        .koju-linkit a { background: #150d22; border: 1px dashed #00f0ff; color: #00f0ff; padding: 8px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; }
-        .koju-linkit a:hover { background: #00f0ff; color: #000; }
         @media (min-width: 1000px) { .countdown-overlay { font-size: 20px; top: 24px; left: 178px; } }
         @media (max-width: 500px) { .grid-row { grid-template-columns: 65px 1fr 90px; } .grid-cell { font-size: 12px; padding: 6px; } }
     </style>
@@ -96,6 +93,7 @@
 
 <div class="container">
 
+    <!-- ETUSIVU -->
     <div id="koti" class="page active">
         <div class="card" style="background: linear-gradient(135deg, #150d22 0%, #0d1b2a 100%); border-left-color: #00f0ff;">
             <h3>☀️ Tammalahtirock Säätila (Kontiolahti)</h3>
@@ -112,11 +110,13 @@
         <div id="news-container">Päivitetään uutisia...</div>
     </div>
 
+    <!-- KARTTA -->
     <div id="kartta" class="page">
         <h2>Aluekartta</h2>
         <div class="map-wrapper"><img src="tammalahti_kartta.png" alt="Aluekartta"></div>
     </div>
     
+    <!-- AIKATAULUT -->
     <div id="ohjelma" class="page">
         <h2>Festivaaliaikataulut</h2>
         <div class="schedule-controls">
@@ -139,6 +139,7 @@
         </div>
     </div>
 
+    <!-- FESTARIPASSI -->
     <div id="passi" class="page">
         <h2>Digitaalinen Festaripassi</h2>
         <div class="pass">
@@ -152,11 +153,6 @@
                 <div class="stamp-box" id="stamp-kohtalo">🔮 Kohtalon Koju</div>
             </div>
 
-            <div class="koju-linkit">
-                <a id="linkki-kamera" href="koju.html" target="_blank">Testaa Kameraa</a>
-                <a id="linkki-glitter" href="glitter.html" target="_blank">Testaa Glitteriä</a>
-            </div>
-
             <div class="my-stamps">
                 <h4 style="margin:0 0 10px 0;">Omat festarikuvasi:</h4>
                 <div class="gallery" id="my-photo-gallery"><p>Ei kuvia vielä.</p></div>
@@ -164,6 +160,7 @@
         </div>
     </div>
 
+    <!-- KUVASEINÄ -->
     <div id="galleria" class="page">
         <h2>Kaikkien yhteinen kuvaseinä</h2>
         <div class="gallery" id="photo-gallery">Odotellaan otoksia...</div>
@@ -216,9 +213,6 @@
     const myFestariNimi = localStorage.getItem('festariNimiID');
     document.getElementById('festival-name-display').innerText = myFestariNimi;
 
-    document.getElementById('linkki-kamera').href = `koju.html?nimi=${encodeURIComponent(myFestariNimi)}`;
-    document.getElementById('linkki-glitter').href = `glitter.html?nimi=${encodeURIComponent(myFestariNimi)}`;
-
     // Kello
     const alkamisaika = new Date("July 17, 2026 14:00:00").getTime();
     const paattymisaika = new Date("July 19, 2026 23:59:59").getTime();
@@ -242,7 +236,7 @@
     setInterval(updateCountdown, 1000); updateCountdown();
 
     const newsContainer = document.getElementById('news-container');
-    if(newsContainer) newsContainer.innerHTML = `<div class="card news-flash"><h3>🚨 Live-linjat auki!</h3><p>Tietokantayhteys muodostettu ilman korttipakkoa nimelle: <b>${myFestariNimi}</b>. Testaa kuvan ottoa alta!</p></div>`;
+    if(newsContainer) newsContainer.innerHTML = `<div class="card news-flash"><h3>🚨 Tervetuloa!</h3><p>Tietokantayhteys muodostettu nimelle: <b>${myFestariNimi}</b>. Skannaa kojujen koodit alueella täyttääksesi passin!</p></div>`;
 
     // Luku suoraan Firestoresta ilman Storagea
     onSnapshot(query(collection(db, "kuvat"), orderBy("aika", "desc")), (snapshot) => {
@@ -256,7 +250,7 @@
             const data = doc.data();
             if (data.kuva_url) {
                 const item = document.createElement('div'); item.className = 'gallery-item';
-                const img = document.createElement('img'); img.src = data.kuva_url; // Base64 toimii suoraan img.src:ssä!
+                const img = document.createElement('img'); img.src = data.kuva_url;
                 const tag = document.createElement('div'); tag.className = 'author-tag';
                 tag.innerText = (data.tyyppi === 'glitter' ? "✨ " : "📸 ") + (data.tekija_nimi || "Rokkari");
                 item.appendChild(img); item.appendChild(tag);
@@ -279,7 +273,7 @@
                 }
             }
         });
-        if(myGalleryContainer && !hasMyPhotos) myGalleryContainer.innerHTML = "<p>Ei omia kuvia vielä. Käytä testilinkkejä ylhäältä!</p>";
+        if(myGalleryContainer && !hasMyPhotos) myGalleryContainer.innerHTML = "<p>Ei omia kuvia vielä. Skannaa kojun koodi saadaksesi leiman!</p>";
     });
 </script>
 </body>
