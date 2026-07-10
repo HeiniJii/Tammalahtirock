@@ -17,10 +17,12 @@
             width: 100%; aspect-ratio: 16 / 7; max-height: 500px;
         }
         .countdown-overlay {
-            position: absolute; top: 4.8%; left: 17.8%; color: #ff007f;
-            font-family: 'Courier New', Courier, monospace; font-size: 2vw; font-weight: bold;
-            text-shadow: 0 0 8px #ff007f, 0 0 20px #ff007f; z-index: 10;
-            pointer-events: none; letter-spacing: 1px; background-color: #0b0214; padding: 0 2px;
+            position: absolute; top: 4%; left: 16%; color: #ff007f;
+            font-family: 'Courier New', Courier, monospace; font-size: 3.5vw; font-weight: bold;
+            text-shadow: 0 0 10px #ff007f, 0 0 25px #ff007f; z-index: 10;
+            pointer-events: none; letter-spacing: 2px; 
+            background-color: #0b0214; padding: 4px 12px; border-radius: 6px;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5); border: 1px solid rgba(255, 0, 127, 0.3);
         }
         nav {
             position: -webkit-sticky; position: sticky; top: 0; z-index: 1000;
@@ -86,10 +88,10 @@
         .chat-btn:hover { background: #ee0070; box-shadow: 0 0 8px #ff007f; }
         
         /* Sääupotuksen tyylit */
-        .weather-wrapper { width: 100%; margin-top: 15px; border-radius: 8px; overflow: hidden; background: #000; border: 1px solid rgba(0, 240, 255, 0.2); }
+        .weather-wrapper { width: 100%; margin-top: 15px; border-radius: 8px; overflow: hidden; height: 220px; border: 1px solid rgba(0, 240, 255, 0.2); }
         .radar-wrapper { width: 100%; margin-top: 12px; border-radius: 8px; overflow: hidden; height: 250px; border: 1px solid rgba(255, 0, 127, 0.2); box-shadow: 0 0 10px rgba(255, 0, 127, 0.1); }
         
-        @media (min-width: 1000px) { .countdown-overlay { font-size: 20px; top: 24px; left: 178px; } }
+        @media (min-width: 1000px) { .countdown-overlay { font-size: 32px; top: 20px; left: 160px; padding: 6px 20px; } }
         @media (max-width: 500px) { .grid-row { grid-template-columns: 80px 1fr 100px; } .grid-cell { font-size: 12px; padding: 6px; } }
     </style>
 </head>
@@ -114,10 +116,17 @@
         <div class="card" style="background: linear-gradient(135deg, #150d22 0%, #0d1b2a 100%); border-left-color: #00f0ff;">
             <h3 style="margin-bottom: 5px;">☀️ Tammalahtirock Säätila & Sadetutka livenä</h3>
             
-            <!-- ENNUSTE-WIDGET -->
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin: 10px 0;">
+                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>To 16.7.</h4><span style="color:#00f0ff;font-size:12px;">Talkoot</span></div>
+                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>Pe 17.7.</h4><span style="color:#00f0ff;font-size:12px;font-weight:bold;color:#ff007f;">Tammalahtirock</span></div>
+                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>La 18.7.</h4><span style="color:#00f0ff;font-size:12px;font-weight:bold;color:#00f0ff;">Ilosaarirock</span></div>
+                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>Su 19.7.</h4><span style="color:#00f0ff;font-size:12px;">Brunssi</span></div>
+            </div>
+
+            <!-- ENNUSTE-WIDGET (KORJATTU TOIMIVAAN WINDY-MALLIIN) -->
             <div class="weather-wrapper">
-                <iframe src="https://v6.foreca.weatherwidget.org/v1/cards/current/10652467?theme=dark&bg=rgba(21,13,34,1)&txt-color=ffffff&l-color=00f0ff&units=metric&lang=fi" 
-                        width="100%" height="110" frameborder="0" scrolling="no" style="border:none; overflow:hidden; display:block;"></iframe>
+                <iframe src="https://embed.windy.com/embed.html?type=forecast&location=coordinates&metricRain=default&metricWind=default&zoom=11&product=ecmwf&level=surface&lat=62.721&lon=29.894&detailLat=62.721&detailLon=29.894&detail=false" 
+                        width="100%" height="100%" frameborder="0" style="border:none; display:block;"></iframe>
             </div>
 
             <!-- SADETUTKA-UPOTUS -->
