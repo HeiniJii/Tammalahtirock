@@ -99,8 +99,8 @@
             <h3>☀️ Tammalahtirock Säätila (Kontiolahti)</h3>
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin: 10px 0;">
                 <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>To 16.7.</h4><span style="color:#00f0ff;font-size:12px;">Talkoot</span></div>
-                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>Pe 17.7.</h4><span style="color:#00f0ff;font-size:12px;">Tammalahtirock</span></div>
-                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>La 18.7.</h4><span style="color:#00f0ff;font-size:12px;">Ilosaarirock</span></div>
+                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>Pe 17.7.</h4><span style="color:#00f0ff;font-size:12px;">Rave</span></div>
+                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>La 18.7.</h4><span style="color:#00f0ff;font-size:12px;">Show</span></div>
                 <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>Su 19.7.</h4><span style="color:#00f0ff;font-size:12px;">Brunssi</span></div>
             </div>
             <a href="https://www.ilmatieteenlaitos.fi/saa/kontiolahti/kontioniemi" target="_blank" style="display:inline-block; border:1px solid #00f0ff; color:#00f0ff; padding:6px 12px; border-radius:6px; text-decoration:none; font-size:12px; font-weight:bold;">📊 Ennuste</a>
@@ -162,7 +162,6 @@
 
         <!-- NAKKILISTA-OSIO -->
         <div id="section-nakkilista" class="schedule-section">
-            
             <!-- ENNAKOT -->
             <div class="day-title">Ennakkovalmistelut</div>
             <div class="grid-timetable">
@@ -229,7 +228,6 @@
                 <div class="grid-row"><div class="grid-cell time">2 h</div><div class="grid-cell">Loppusiivous</div><div class="grid-cell who">Evripadi</div></div>
                 <div class="grid-row"><div class="grid-cell time">1 h</div><div class="grid-cell">Jääkaapin palautus</div><div class="grid-cell who">-</div></div>
             </div>
-
         </div>
     </div>
 
@@ -296,15 +294,27 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Haetaan nimi joko url-osoitteesta (?nimi=...) tai selaimen muistista
+    const urlParams = new URLSearchParams(window.location.search);
+    let myFestariNimi = urlParams.get('nimi');
+
     const etuliitteet = ["DJ", "Kapteeni", "Kuningas", "Lady", "Herra", "Tohtori", "Iso", "Pikku", "Ylipäällikkö", "Metsän"];
     const keskiosat = ["Glitter", "Crocs", "Tölkki", "Sauna", "Makkara", "Disco", "Hyttynen", "Nuotio", "Basso", "Kimallus"];
     const loput = ["Keisari", "Noita", "Ninja", "Mestari", "Ruhtinas", "Velho", "Kulkija", "Sankari", "Tietäjä", "Tuhooja"];
-    
-    if (!localStorage.getItem('festariNimiID')) {
-        const name = `${etuliitteet[Math.floor(Math.random()*10)]} ${keskiosat[Math.floor(Math.random()*10)]} ${loput[Math.floor(Math.random()*10)]}`;
-        localStorage.setItem('festariNimiID', name);
+
+    // Pomminvarma nimen lukitus: jos URL:issa on nimi, otetaan se ja lukitaan muistiin
+    if (myFestariNimi) {
+        localStorage.setItem('festariNimiID', myFestariNimi);
+    } else {
+        // Jos URL:issa ei ole nimeä, yritetään lukea vanha muistista
+        myFestariNimi = localStorage.getItem('festariNimiID');
+        // Vasta jos sitäkään ei löydy, arvotaan kokonaan uusi
+        if (!myFestariNimi) {
+            myFestariNimi = `${etuliitteet[Math.floor(Math.random()*10)]} ${keskiosat[Math.floor(Math.random()*10)]} ${loput[Math.floor(Math.random()*10)]}`;
+            localStorage.setItem('festariNimiID', myFestariNimi);
+        }
     }
-    const myFestariNimi = localStorage.getItem('festariNimiID');
+    
     document.getElementById('festival-name-display').innerText = myFestariNimi;
 
     // Kello
@@ -330,7 +340,12 @@
     setInterval(updateCountdown, 1000); updateCountdown();
 
     const newsContainer = document.getElementById('news-container');
-    if(newsContainer) newsContainer.innerHTML = `<div class="card news-flash"><h3>🚨 Tervetuloa!</h3><p>Tietokantayhteys muodostettu nimelle: <b>${myFestariNimi}</b>. Skannaa kojujen koodit alueella täyttääksesi passin!</p></div>`;
+    if(newsContainer) newsContainer.innerHTML = `<div class="card news-flash"><h3>🚨 Tervetuloa!</h3><p>Tietokantayhteys aktivoitu nimelle: <b>${myFestariNimi}</b>. Skannaa kojujen QR-koodit täyttääksesi passin!</p></div>`;
+
+    // Seuraavaksi tarkistetaan manuaalisesti myös kojujen suoritukset, jos ne jäivät välimuistiin jumiin
+    if (localStorage.getItem('suoritus_kohtalo') === 'true') {
+        if(document.getElementById('stamp-kohtalo')) document.getElementById('stamp-kohtalo').className = "stamp-box checked";
+    }
 
     // Luku suoraan Firestoresta ilman Storagea
     onSnapshot(query(collection(db, "kuvat"), orderBy("aika", "desc")), (snapshot) => {
@@ -350,7 +365,7 @@
                 item.appendChild(img); item.appendChild(tag);
                 if(galleryContainer) galleryContainer.appendChild(item);
 
-                if (data.tekija_nimi === myFestariNimi || data.tekija_nimi === localStorage.getItem('festariNimiID')) {
+                if (data.tekija_nimi === myFestariNimi) {
                     hasMyPhotos = true;
                     if (data.tyyppi === 'glitter') {
                         localStorage.setItem('suoritus_glitter', 'true');
@@ -369,6 +384,7 @@
         });
         if(myGalleryContainer && !hasMyPhotos) myGalleryContainer.innerHTML = "<p>Ei omia kuvia vielä. Skannaa kojun koodi saadaksesi leiman!</p>";
     });
+</script>
 </script>
 </body>
 </html>
