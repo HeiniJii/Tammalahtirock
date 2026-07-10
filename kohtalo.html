@@ -11,6 +11,18 @@
             margin: 0; padding: 20px; display: flex; flex-direction: column;
             align-items: center; justify-content: center; min-height: 100vh; box-sizing: border-box;
         }
+        /* Kyber-paluupainike */
+        .back-nav {
+            width: 100%; max-width: 400px; margin-bottom: 10px; text-align: left;
+        }
+        .back-btn {
+            background: rgba(31, 31, 47, 0.9); border: 1px solid #8a2be2; color: #da70d6;
+            padding: 10px 15px; border-radius: 20px; font-weight: bold; cursor: pointer;
+            text-decoration: none; display: inline-block; font-size: 14px;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.3); transition: 0.3s;
+        }
+        .back-btn:hover { background: #8a2be2; color: white; box-shadow: 0 0 15px #da70d6; }
+
         .crystal-ball {
             width: 150px; height: 150px; background: radial-gradient(circle, #8a2be2, #4b0082, #000);
             border-radius: 50%; box-shadow: 0 0 30px #8a2be2, inset 0 0 20px #fff;
@@ -33,14 +45,19 @@
 </head>
 <body>
 
+    <!-- Navigaatiopaluu -->
+    <div class="back-nav">
+        <a href="index.html" class="back-btn">⬅ PALAA PÄÄSIVULLE</a>
+    </div>
+
     <h1>🔮 KOHTALON KOJU</h1>
     <p>Tammalahtirock 2026</p>
 
     <div class="crystal-ball">👁️</div>
 
     <div class="box">
-        <h3>Tekoäly määrittää kohtalosi...</h3>
-        <p style="font-size: 14px; opacity: 0.7;">Paina nappia, suorita tekoälyn antama absurdi festaritehtävä ja leimaa passisi.</p>
+        <h3>Määritä kohtalosi...</h3>
+        <p style="font-size: 14px; opacity: 0.7;">Paina nappia, suorita saamasi absurdi festaritehtävä ja leimaa passisi.</p>
         <div id="challenge-text">Kosketa kristallipalloa saadaksesi tehtävän...</div>
         <button id="action-btn" class="btn" onclick="generateChallenge()">ARVO TEHTÄVÄ</button>
     </div>
@@ -52,9 +69,9 @@
         "Esitä hidastettua rokkikukkoa 30 sekunnin ajan keskellä festarialuetta.",
         "Käy kohteliaasti kysymässä järjestyksenvalvojalta, saako alueella harrastaa ilmakitaran soittoa ilman lupakorttia.",
         "Etsi festarialueen suurin kivi ja pidä sille lyhyt, mutta koskettava kiitospuhe.",
-        "Uloita yläfemma vähintään kolmelle tuntemattomalle festarivieraalle peräkkäin sanoen 'Kimaltelet upeasti!'",
+        "Ulota yläfemma vähintään kolmelle tuntemattomalle festarivieraalle peräkkäin sanoen 'Kimaltelet upeasti!'",
         "Kävele seuraavat 3 minuuttia pelkästään takaperin tai sivuttain kuin rapu.",
-        "Mene hattarakojulle ja kysy vakavalla naamalla, voiko hattaran saada valkosipulin makuisena."
+        "Mene makkara/ruokakojulle ja kysy vakavalla naamalla, voiko annoksen saada valkosipulin makuisena hattarana."
     ];
 
     let vaihe = 0;
