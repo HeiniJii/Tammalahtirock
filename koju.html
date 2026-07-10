@@ -31,39 +31,18 @@
         }
         video, canvas { width: 100%; height: 100%; object-fit: cover; }
         canvas { display: none; }
-        .btn {
-            background: linear-gradient(45deg, #ff007f, #7928ca); color: white; border: none;
-            padding: 20px 40px; font-size: 22px; font-weight: bold; border-radius: 50px;
-            cursor: pointer; margin-top: 25px; width: 100%; max-width: 300px;
-        }
-        .btn:disabled { background: #555; cursor: not-allowed; }
-        #status { margin-top: 15px; color: #aaa; font-size: 16px; width: 100%; max-width: 400px; }
+        
+        .btn-group { display: flex; gap: 10px; width: 100%; max-width: 400px; margin-top: 20px; }
+        .btn { flex: 2; background: linear-gradient(45deg, #ff007f, #7928ca); color: white; border: none; padding: 15px 20px; font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 10px rgba(255, 0, 127, 0.3); }
+        .btn-flip { flex: 1; background: #222; border: 2px solid #00f0ff; color: #00f0ff; padding: 15px; font-size: 18px; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        .btn:disabled, .btn-flip:disabled { background: #555; border-color: #555; color: #888; cursor: not-allowed; box-shadow: none; }
+        
+        #status { margin-top: 15px; color: #aaa; font-size: 15px; width: 100%; max-width: 400px; }
         .flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; }
         @keyframes flash-animation { 0% { opacity: 1; } 100% { opacity: 0; } }
 
-        /* Erityisohje iPhonen Chrome-ongelmaan */
-        .iphone-chrome-alert {
-            background: rgba(255, 0, 127, 0.15);
-            border: 2px solid #ff007f;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: left;
-            font-size: 14px;
-            line-height: 1.6;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
-        }
-        .url-box {
-            background: #000;
-            padding: 10px;
-            border-radius: 6px;
-            font-family: monospace;
-            color: #00f0ff;
-            word-break: break-all;
-            margin: 10px 0;
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            user-select: all;
-            -webkit-user-select: all;
-        }
+        .alert-box { background: rgba(255, 0, 127, 0.1); border: 2px solid #ff007f; padding: 20px; border-radius: 12px; text-align: left; font-size: 14px; line-height: 1.6; box-shadow: 0 0 15px rgba(255, 0, 127, 0.3); margin-top: 15px; }
+        .url-box { background: #000; padding: 10px; border-radius: 6px; font-family: monospace; color: #00f0ff; word-break: break-all; margin: 10px 0; border: 1px solid rgba(0, 240, 255, 0.3); user-select: all; }
     </style>
 </head>
 <body>
@@ -73,7 +52,7 @@
     </div>
 
     <h1>📸 FESTARIKAMERA</h1>
-    <div class="user-badge" id="user-badge-display">Kuvaajana: Latautuu...</div>
+    <div class="user-badge" id="user-badge-display">Kuvaajana: Synkronoidaan...</div>
 
     <div id="camera-container">
         <video id="video" autoplay playsinline></video>
@@ -81,7 +60,11 @@
         <div id="flash-effect" class="flash"></div>
     </div>
 
-    <button id="snap-btn" class="btn" onclick="takeSnapshot()">RÄPSÄISE KUVA!</button>
+    <div class="btn-group">
+        <button id="snap-btn" class="btn" onclick="takeSnapshot()">RÄPSÄISE KUVA!</button>
+        <button id="flip-btn" class="btn-flip" onclick="switchCamera()">🔄</button>
+    </div>
+    
     <div id="status">Käynnistetään puhelimen kameraa...</div>
 
 <script type="module">
@@ -102,43 +85,100 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    const myFestariNimi = localStorage.getItem('festariNimiID') || "Anonyymi Rokkari";
+    // Luetaan nimi osoiteriviltä linkistä synkronointia varten
+    const urlParams = new URLSearchParams(window.location.search);
+    let myFestariNimi = urlParams.get('nimi');
+
+    if (!myFestariNimi) {
+        // Jos nimeä ei ole linkissä (esim. suora QR-skannaus), pyydetään se tai haetaan selaimesta
+        myFestariNimi = localStorage.getItem('festariNimiID') || prompt("Syötä festarinimesi (löytyy etusivulta):") || "Mysteeri Rokkari";
+    }
     document.getElementById('user-badge-display').innerText = `Kuvaajana: ${myFestariNimi}`;
 
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const statusDiv = document.getElementById('status');
     const snapBtn = document.getElementById('snap-btn');
+    const flipBtn = document.getElementById('flip-btn');
     const flashEffect = document.getElementById('flash-effect');
 
+    let currentFacingMode = "user"; // Aloitetaan etukameralla (selfie)
+    let currentStream = null;
+
     async function startCamera() {
+        if (currentStream) { currentStream.getTracks().forEach(track => track.stop()); }
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", aspectRatio: 1 }, audio: false });
-            video.srcObject = stream;
-            statusDiv.innerText = "Kamera valmis. Hymyile!";
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: currentFacingMode, aspectRatio: 1 }, audio: false 
+            });
+            currentStream = stream; video.srcObject = stream;
+            statusDiv.innerText = currentFacingMode === "user" ? "Selfie-tila valmis. Hymyile!" : "Takakamera valmis.";
         } catch (err) {
-            try {
-                const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
-                video.srcObject = fallbackStream;
-                statusDiv.innerText = "Kamera valmis.";
-            } catch(e) {
-                // POMMINVARMA IPHONE + CHROME RATKAISU
-                const nykyinenOsoite = window.location.href;
-                statusDiv.innerHTML = `
-                    <div class="iphone-chrome-alert">
+            showSmartInstructions();
+        }
+    }
+
+    window.switchCamera = function() {
+        currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
+        startCamera();
+    }
+
+    function showSmartInstructions() {
+        const ua = navigator.userAgent.toLowerCase();
+        const isIPhone = /iphone|ipad|ipod/.test(ua);
+        const isAndroid = /android/.test(ua);
+        const isChrome = /crios|chrome/.test(ua);
+        const nykyinenOsoite = window.location.href;
+
+        let ohjeHtml = "";
+
+        if (isIPhone) {
+            if (isChrome) {
+                ohjeHtml = `
+                    <div class="alert-box">
                         <b style="color: #ff007f; font-size: 16px; display:block; margin-bottom:10px;">⚠️ iPhonen Chrome estää kameran!</b>
-                        Applen rajoitusten vuoksi iPhonen Chrome (ja Incognito-tila) ei salli kameran avaamista tällä sivulla.<br><br>
-                        <b>TOIMI NÄIN:</b><br>
-                        1. Kopioi alta tämä osoite talteen (paina pitkään osoitetta):
+                        Applen sääntöjen vuoksi iPhonen Chrome (tai Incognito-tila) ei salli kameran käyttöä.<br><br>
+                        <b>KORJAUS:</b> Kopioi alta sivun osoite ja liitä se iPhonen omaan <b>Safari-selaimeen</b> (kompassikuvake):
                         <div class="url-box">${nykyinenOsoite}</div>
-                        2. Poistu Chromesta ja avaa iPhonen oma <b>Safari-selain</b> (kompassin kuva).<br>
-                        3. Liitä osoite Safarin osoiteriville ja salli kamera, niin homma toimii heti!
                     </div>
                 `;
-                snapBtn.disabled = true;
-                document.getElementById('camera-container').style.borderColor = '#ff007f';
+            } else {
+                ohjeHtml = `
+                    <div class="alert-box">
+                        <b style="color: #ff007f; font-size: 16px; display:block; margin-bottom:10px;">🔒 Safari estää kameran!</b>
+                        Oikeudet on evätty.<br><br>
+                        <b>NÄIN SALLIT KAMERAN SAFARISSA:</b><br>
+                        1. Paina osoiterivin vasemmassa reunassa olevaa <b>"Aa"</b> tai liukusäädin-kuvaketta.<br>
+                        2. Valitse <b>Sivuston asetukset</b> (Website Settings).<br>
+                        3. Muuta Kameran kohdalle: <b>Salli</b> (Allow).<br>
+                        4. Päivitä tämä sivu painamalla ylänuolta!
+                    </div>
+                `;
             }
+        } else if (isAndroid) {
+            ohjeHtml = `
+                <div class="alert-box">
+                    <b style="color: #ff007f; font-size: 16px; display:block; margin-bottom:10px;">🔒 Android / Chrome estää kameran!</b>
+                    Oikeudet on evätty tai olet Incognito-tilassa.<br><br>
+                    <b>NÄIN SALLIT KAMERAN ANDROIDILLA:</b><br>
+                    1. Jos olet Incognito/yksityistilassa, sulje se ja avaa linkki normaalisti.<br>
+                    2. Paina osoiterivin vasemmassa reunassa olevaa <b>Lukon tai asetusten kuvaketta</b>.<br>
+                    3. Valitse <b>Sivuston luvat</b> ja kytke <b>Kamera: Salli</b>.<br>
+                    4. Päivitä sivu!
+                </div>
+            `;
+        } else {
+            ohjeHtml = `
+                <div class="alert-box">
+                    <b style="color: #ff007f; font-size: 16px; display:block; margin-bottom:10px;">🔒 Kameraa ei voitu avata</b>
+                    Varmista, että olet antanut selaimelle luvan käyttää laitteen kameraa ja että et ole Incognito-tilassa.
+                </div>
+            `;
         }
+
+        statusDiv.innerHTML = ohjeHtml;
+        snapBtn.disabled = true; flipBtn.disabled = true;
+        document.getElementById('camera-container').style.borderColor = '#ff007f';
     }
 
     window.takeSnapshot = function() {
@@ -147,7 +187,9 @@
         setTimeout(() => { flashEffect.style.animation = "flash-animation 0.5s ease-out"; }, 10);
 
         const context = canvas.getContext('2d');
+        if (currentFacingMode === "user") { context.translate(800, 0); context.scale(-1, 1); }
         context.drawImage(video, 0, 0, 800, 800);
+        if (currentFacingMode === "user") { context.setTransform(1, 0, 0, 1, 0, 0); }
         
         canvas.toBlob(async (blob) => {
             if (!blob) { snapBtn.disabled = false; return; }
@@ -168,7 +210,7 @@
                 });
 
                 localStorage.setItem('suoritus_kamera', 'true');
-                statusDiv.innerText = "Kuva tallennettu onnistuneesti!";
+                statusDiv.innerText = "Kuva tallennettu onnistuneesti! Voit palata pääsivulle.";
             } catch (error) {
                 statusDiv.innerText = "Lataus epäonnistui. Tarkista yhteys.";
             }
