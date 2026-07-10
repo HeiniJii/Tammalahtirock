@@ -73,12 +73,9 @@
         .stamp-box { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 10px; flex: 1; font-size: 12px; border: 2px dashed #aaa; text-align: center; }
         .stamp-box.checked { border-color: #00f0ff; background: rgba(0, 240, 255, 0.2); font-weight: bold; box-shadow: 0 0 8px #00f0ff; }
         .my-stamps { margin-top: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; text-align: left; }
-        
-        /* Kojujen pikalinkit testaukseen nimen kanssa */
         .koju-linkit { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
         .koju-linkit a { background: #150d22; border: 1px dashed #00f0ff; color: #00f0ff; padding: 8px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; }
         .koju-linkit a:hover { background: #00f0ff; color: #000; }
-
         @media (min-width: 1000px) { .countdown-overlay { font-size: 20px; top: 24px; left: 178px; } }
         @media (max-width: 500px) { .grid-row { grid-template-columns: 65px 1fr 90px; } .grid-cell { font-size: 12px; padding: 6px; } }
     </style>
@@ -99,7 +96,6 @@
 
 <div class="container">
 
-    <!-- ETUSIVU -->
     <div id="koti" class="page active">
         <div class="card" style="background: linear-gradient(135deg, #150d22 0%, #0d1b2a 100%); border-left-color: #00f0ff;">
             <h3>☀️ Tammalahtirock Säätila (Kontiolahti)</h3>
@@ -112,18 +108,15 @@
             <a href="https://www.ilmatieteenlaitos.fi/saa/kontiolahti/kontioniemi" target="_blank" style="display:inline-block; border:1px solid #00f0ff; color:#00f0ff; padding:6px 12px; border-radius:6px; text-decoration:none; font-size:12px; font-weight:bold;">📊 Ennuste</a>
             <a href="https://www.ilmatieteenlaitos.fi/sade-ja-pilvitilat" target="_blank" style="display:inline-block; border:1px solid #00f0ff; color:#00f0ff; padding:6px 12px; border-radius:6px; text-decoration:none; font-size:12px; font-weight:bold; margin-left:5px;">📡 Sadetutka</a>
         </div>
-
         <h2>Live-uutiset (AI-Newsroom)</h2>
         <div id="news-container">Päivitetään uutisia...</div>
     </div>
 
-    <!-- KARTTA -->
     <div id="kartta" class="page">
         <h2>Aluekartta</h2>
         <div class="map-wrapper"><img src="tammalahti_kartta.png" alt="Aluekartta"></div>
     </div>
     
-    <!-- AIKATAULUT -->
     <div id="ohjelma" class="page">
         <h2>Festivaaliaikataulut</h2>
         <div class="schedule-controls">
@@ -142,12 +135,10 @@
             <div class="day-title">Torstai 16.7.2026</div>
             <div class="grid-timetable">
                 <div class="grid-row"><div class="grid-cell time">16:00</div><div class="grid-cell">Makkara-ainesten nouto, Ylämylly</div><div class="grid-cell who">Opa</div></div>
-                <div class="grid-row"><div class="grid-cell time">17:00</div><div class="grid-cell">Ruokien nouto, Prisma Joensuu</div><div class="grid-cell who">Opa, Spede</div></div>
             </div>
         </div>
     </div>
 
-    <!-- FESTARIPASSI -->
     <div id="passi" class="page">
         <h2>Digitaalinen Festaripassi</h2>
         <div class="pass">
@@ -161,7 +152,6 @@
                 <div class="stamp-box" id="stamp-kohtalo">🔮 Kohtalon Koju</div>
             </div>
 
-            <!-- Testauslinkit, jotka vievät nimen automaattisesti eteenpäin kiertelemään estot -->
             <div class="koju-linkit">
                 <a id="linkki-kamera" href="koju.html" target="_blank">Testaa Kameraa</a>
                 <a id="linkki-glitter" href="glitter.html" target="_blank">Testaa Glitteriä</a>
@@ -174,7 +164,6 @@
         </div>
     </div>
 
-    <!-- KUVASEINÄ -->
     <div id="galleria" class="page">
         <h2>Kaikkien yhteinen kuvaseinä</h2>
         <div class="gallery" id="photo-gallery">Odotellaan otoksia...</div>
@@ -216,7 +205,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Nimigeneraattori
     const etuliitteet = ["DJ", "Kapteeni", "Kuningas", "Lady", "Herra", "Tohtori", "Iso", "Pikku", "Ylipäällikkö", "Metsän"];
     const keskiosat = ["Glitter", "Crocs", "Tölkki", "Sauna", "Makkara", "Disco", "Hyttynen", "Nuotio", "Basso", "Kimallus"];
     const loput = ["Keisari", "Noita", "Ninja", "Mestari", "Ruhtinas", "Velho", "Kulkija", "Sankari", "Tietäjä", "Tuhooja"];
@@ -228,7 +216,6 @@
     const myFestariNimi = localStorage.getItem('festariNimiID');
     document.getElementById('festival-name-display').innerText = myFestariNimi;
 
-    // Päivitetään pikalinkit sisältämään festarinimi urliin synkronointia varten
     document.getElementById('linkki-kamera').href = `koju.html?nimi=${encodeURIComponent(myFestariNimi)}`;
     document.getElementById('linkki-glitter').href = `glitter.html?nimi=${encodeURIComponent(myFestariNimi)}`;
 
@@ -254,11 +241,10 @@
     }
     setInterval(updateCountdown, 1000); updateCountdown();
 
-    // Uutiset
     const newsContainer = document.getElementById('news-container');
-    if(newsContainer) newsContainer.innerHTML = `<div class="card news-flash"><h3>🚨 Live-linjat auki!</h3><p>Tietokantayhteys muodostettu onnistuneesti nimelle: <b>${myFestariNimi}</b>. Ota testikuva alta!</p></div>`;
+    if(newsContainer) newsContainer.innerHTML = `<div class="card news-flash"><h3>🚨 Live-linjat auki!</h3><p>Tietokantayhteys muodostettu ilman korttipakkoa nimelle: <b>${myFestariNimi}</b>. Testaa kuvan ottoa alta!</p></div>`;
 
-    // Reaaliaikainen seuranta ja leimojen haku nimellä
+    // Luku suoraan Firestoresta ilman Storagea
     onSnapshot(query(collection(db, "kuvat"), orderBy("aika", "desc")), (snapshot) => {
         const galleryContainer = document.getElementById('photo-gallery');
         const myGalleryContainer = document.getElementById('my-photo-gallery');
@@ -269,16 +255,14 @@
         snapshot.forEach((doc) => {
             const data = doc.data();
             if (data.kuva_url) {
-                // Kaikkien kuvat
                 const item = document.createElement('div'); item.className = 'gallery-item';
-                const img = document.createElement('img'); img.src = data.kuva_url;
+                const img = document.createElement('img'); img.src = data.kuva_url; // Base64 toimii suoraan img.src:ssä!
                 const tag = document.createElement('div'); tag.className = 'author-tag';
                 tag.innerText = (data.tyyppi === 'glitter' ? "✨ " : "📸 ") + (data.tekija_nimi || "Rokkari");
                 item.appendChild(img); item.appendChild(tag);
                 if(galleryContainer) galleryContainer.appendChild(item);
 
-                // Omat kuvat (synkronoitu tarkalla nimellä)
-                if (data.tekija_nimi === myFestariNimi) {
+                if (data.tekija_nimi === myFestariNimi || data.tekija_nimi === localStorage.getItem('festariNimiID')) {
                     hasMyPhotos = true;
                     if (data.tyyppi === 'glitter') {
                         localStorage.setItem('suoritus_glitter', 'true');
