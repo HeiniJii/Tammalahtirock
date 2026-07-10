@@ -11,10 +11,7 @@
             margin: 0; padding: 20px; display: flex; flex-direction: column;
             align-items: center; justify-content: center; min-height: 100vh; box-sizing: border-box;
         }
-        /* Kyber-paluupainike */
-        .back-nav {
-            width: 100%; max-width: 400px; margin-bottom: 20px; text-align: left;
-        }
+        .back-nav { width: 100%; max-width: 400px; margin-bottom: 20px; text-align: left; }
         .back-btn {
             background: rgba(31, 31, 47, 0.9); border: 1px solid #00f0ff; color: #00f0ff;
             padding: 10px 15px; border-radius: 20px; font-weight: bold; cursor: pointer;
@@ -40,14 +37,37 @@
             cursor: pointer; margin-top: 25px; width: 100%; max-width: 300px;
         }
         .btn:disabled { background: #555; cursor: not-allowed; }
-        #status { margin-top: 15px; color: #aaa; font-size: 16px; }
+        #status { margin-top: 15px; color: #aaa; font-size: 16px; width: 100%; max-width: 400px; }
         .flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; }
         @keyframes flash-animation { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+        /* Erityisohje iPhonen Chrome-ongelmaan */
+        .iphone-chrome-alert {
+            background: rgba(255, 0, 127, 0.15);
+            border: 2px solid #ff007f;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+        }
+        .url-box {
+            background: #000;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            color: #00f0ff;
+            word-break: break-all;
+            margin: 10px 0;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            user-select: all;
+            -webkit-user-select: all;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Navigaatiopaluu -->
     <div class="back-nav">
         <a href="index.html" class="back-btn">⬅ PALAA PÄÄSIVULLE</a>
     </div>
@@ -82,15 +102,7 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    const etuliitteet = ["DJ", "Kapteeni", "Kuningas", "Lady", "Herra", "Tohtori", "Iso", "Pikku", "Ylipäällikkö", "Metsän"];
-    const keskiosat = ["Glitter", "Crocs", "Tölkki", "Sauna", "Makkara", "Disco", "Hyttynen", "Nuotio", "Basso", "Kimallus"];
-    const loput = ["Keisari", "Noita", "Ninja", "Mestari", "Ruhtinas", "Velho", "Kulkija", "Sankari", "Tietäjä", "Tuhooja"];
-
-    if (!localStorage.getItem('festariNimiID')) {
-        const name = `${etuliitteet[Math.floor(Math.random()*10.0)]} ${keskiosat[Math.floor(Math.random()*10.0)]} ${loput[Math.floor(Math.random()*10.0)]}`;
-        localStorage.setItem('festariNimiID', name);
-    }
-    const myFestariNimi = localStorage.getItem('festariNimiID');
+    const myFestariNimi = localStorage.getItem('festariNimiID') || "Anonyymi Rokkari";
     document.getElementById('user-badge-display').innerText = `Kuvaajana: ${myFestariNimi}`;
 
     const video = document.getElementById('video');
@@ -110,15 +122,21 @@
                 video.srcObject = fallbackStream;
                 statusDiv.innerText = "Kamera valmis.";
             } catch(e) {
+                // POMMINVARMA IPHONE + CHROME RATKAISU
+                const nykyinenOsoite = window.location.href;
                 statusDiv.innerHTML = `
-                    <div style="background: rgba(255,0,0,0.1); border: 1px solid #ff007f; padding: 15px; border-radius: 8px; text-align: left; font-size: 13px; line-height: 1.5; margin-top: 10px;">
-                        <b style="color: #ff007f; font-size: 15px;">Kamera on estetty! Näin korjaat sen:</b><br><br>
-                        🍎 <b>iPhone (Safari):</b> Paina osoiterivin <b>"Aa"</b> -kuvaketta &rarr; Sivuston asetukset &rarr; Salli kamera.<br><br>
-                        🤖 <b>Android (Chrome):</b> Paina <b>lukon kuvaketta</b> osoiterivillä &rarr; Luvat &rarr; Salli kamera.<br><br>
-                        <i style="color: #aaa;">Päivitä tämä sivu uudelleen, kun olet antanut luvan!</i>
+                    <div class="iphone-chrome-alert">
+                        <b style="color: #ff007f; font-size: 16px; display:block; margin-bottom:10px;">⚠️ iPhonen Chrome estää kameran!</b>
+                        Applen rajoitusten vuoksi iPhonen Chrome (ja Incognito-tila) ei salli kameran avaamista tällä sivulla.<br><br>
+                        <b>TOIMI NÄIN:</b><br>
+                        1. Kopioi alta tämä osoite talteen (paina pitkään osoitetta):
+                        <div class="url-box">${nykyinenOsoite}</div>
+                        2. Poistu Chromesta ja avaa iPhonen oma <b>Safari-selain</b> (kompassin kuva).<br>
+                        3. Liitä osoite Safarin osoiteriville ja salli kamera, niin homma toimii heti!
                     </div>
                 `;
                 snapBtn.disabled = true;
+                document.getElementById('camera-container').style.borderColor = '#ff007f';
             }
         }
     }
