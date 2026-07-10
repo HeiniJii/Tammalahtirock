@@ -294,23 +294,45 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Haetaan nimi joko url-osoitteesta (?nimi=...) tai selaimen muistista
-    const urlParams = new URLSearchParams(window.location.search);
-    let myFestariNimi = urlParams.get('nimi');
+    // FUNKTIO: Lasketaan laitteelle oma muuttumaton tunniste (sormenjälki)
+    function generoiLaiteKoodi() {
+        const osat = [
+            navigator.userAgent,
+            navigator.language,
+            screen.width + "x" + screen.height,
+            new Date().getTimezoneOffset(),
+            navigator.hardwareConcurrency || 4
+        ];
+        let hash = 0;
+        const str = osat.join('||');
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash |= 0;
+        }
+        return Math.abs(hash);
+    }
 
     const etuliitteet = ["DJ", "Kapteeni", "Kuningas", "Lady", "Herra", "Tohtori", "Iso", "Pikku", "Ylipäällikkö", "Metsän"];
     const keskiosat = ["Glitter", "Crocs", "Tölkki", "Sauna", "Makkara", "Disco", "Hyttynen", "Nuotio", "Basso", "Kimallus"];
     const loput = ["Keisari", "Noita", "Ninja", "Mestari", "Ruhtinas", "Velho", "Kulkija", "Sankari", "Tietäjä", "Tuhooja"];
 
-    // Pomminvarma nimen lukitus: jos URL:issa on nimi, otetaan se ja lukitaan muistiin
+    // Haetaan nimi joko url-osoitteesta tai välimuistista
+    const urlParams = new URLSearchParams(window.location.search);
+    let myFestariNimi = urlParams.get('nimi');
+
     if (myFestariNimi) {
         localStorage.setItem('festariNimiID', myFestariNimi);
     } else {
-        // Jos URL:issa ei ole nimeä, yritetään lukea vanha muistista
         myFestariNimi = localStorage.getItem('festariNimiID');
-        // Vasta jos sitäkään ei löydy, arvotaan kokonaan uusi
         if (!myFestariNimi) {
-            myFestariNimi = `${etuliitteet[Math.floor(Math.random()*10)]} ${keskiosat[Math.floor(Math.random()*10)]} ${loput[Math.floor(Math.random()*10)]}`;
+            // JIPPO: Jos nimeä ei ole missään, lasketaan se LAITETUNNISTEEN avulla matemaattisesti
+            const laiteKoodi = generoiLaiteKoodi();
+            const i1 = laiteKoodi % etuliitteet.length;
+            const i2 = (laiteKoodi >> 2) % keskiosat.length;
+            const i3 = (laiteKoodi >> 4) % loput.length;
+            
+            myFestariNimi = `${etuliitteet[i1]} ${keskiosat[i2]} ${loput[i3]}`;
             localStorage.setItem('festariNimiID', myFestariNimi);
         }
     }
@@ -340,9 +362,8 @@
     setInterval(updateCountdown, 1000); updateCountdown();
 
     const newsContainer = document.getElementById('news-container');
-    if(newsContainer) newsContainer.innerHTML = `<div class="card news-flash"><h3>🚨 Tervetuloa!</h3><p>Tietokantayhteys aktivoitu nimelle: <b>${myFestariNimi}</b>. Skannaa kojujen QR-koodit täyttääksesi passin!</p></div>`;
+    if(newsContainer) newsContainer.innerHTML = `<div class="card news-flash"><h3>🚨 Linjat auki!</h3><p>Tietokantayhteys lukittu nimelle: <b>${myFestariNimi}</b>. Skannaa kojujen QR-koodit täyttääksesi passin!</p></div>`;
 
-    // Seuraavaksi tarkistetaan manuaalisesti myös kojujen suoritukset, jos ne jäivät välimuistiin jumiin
     if (localStorage.getItem('suoritus_kohtalo') === 'true') {
         if(document.getElementById('stamp-kohtalo')) document.getElementById('stamp-kohtalo').className = "stamp-box checked";
     }
@@ -384,7 +405,6 @@
         });
         if(myGalleryContainer && !hasMyPhotos) myGalleryContainer.innerHTML = "<p>Ei omia kuvia vielä. Skannaa kojun koodi saadaksesi leiman!</p>";
     });
-</script>
 </script>
 </body>
 </html>
