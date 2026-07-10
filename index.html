@@ -85,6 +85,10 @@
         .chat-btn { background: #ff007f; border: none; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .chat-btn:hover { background: #ee0070; box-shadow: 0 0 8px #ff007f; }
         
+        /* Sääupotuksen tyylit */
+        .weather-wrapper { width: 100%; margin-top: 15px; border-radius: 8px; overflow: hidden; background: #000; border: 1px solid rgba(0, 240, 255, 0.2); }
+        .radar-wrapper { width: 100%; margin-top: 12px; border-radius: 8px; overflow: hidden; height: 250px; border: 1px solid rgba(255, 0, 127, 0.2); box-shadow: 0 0 10px rgba(255, 0, 127, 0.1); }
+        
         @media (min-width: 1000px) { .countdown-overlay { font-size: 20px; top: 24px; left: 178px; } }
         @media (max-width: 500px) { .grid-row { grid-template-columns: 80px 1fr 100px; } .grid-cell { font-size: 12px; padding: 6px; } }
     </style>
@@ -108,15 +112,24 @@
     <!-- ETUSIVU -->
     <div id="koti" class="page active">
         <div class="card" style="background: linear-gradient(135deg, #150d22 0%, #0d1b2a 100%); border-left-color: #00f0ff;">
-            <h3>☀️ Tammalahtirock Säätila (Kontiolahti)</h3>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin: 10px 0;">
-                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>To 16.7.</h4><span style="color:#00f0ff;font-size:12px;">Talkoot</span></div>
-                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>Pe 17.7.</h4><span style="color:#00f0ff;font-size:12px;">Rave</span></div>
-                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>La 18.7.</h4><span style="color:#00f0ff;font-size:12px;">Show</span></div>
-                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>Su 19.7.</h4><span style="color:#00f0ff;font-size:12px;">Brunssi</span></div>
+            <h3 style="margin-bottom: 5px;">☀️ Tammalahtirock Säätila & Sadetutka livenä</h3>
+            
+            <!-- ENNUSTE-WIDGET -->
+            <div class="weather-wrapper">
+                <iframe src="https://v6.foreca.weatherwidget.org/v1/cards/current/10652467?theme=dark&bg=rgba(21,13,34,1)&txt-color=ffffff&l-color=00f0ff&units=metric&lang=fi" 
+                        width="100%" height="110" frameborder="0" scrolling="no" style="border:none; overflow:hidden; display:block;"></iframe>
             </div>
-            <a href="https://www.ilmatieteenlaitos.fi/saa/kontiolahti/kontioniemi" target="_blank" style="display:inline-block; border:1px solid #00f0ff; color:#00f0ff; padding:6px 12px; border-radius:6px; text-decoration:none; font-size:12px; font-weight:bold;">📊 Ennuste</a>
-            <a href="https://www.ilmatieteenlaitos.fi/sade-ja-pilvitilat" target="_blank" style="display:inline-block; border:1px solid #00f0ff; color:#00f0ff; padding:6px 12px; border-radius:6px; text-decoration:none; font-size:12px; font-weight:bold; margin-left:5px;">📡 Sadetutka</a>
+
+            <!-- SADETUTKA-UPOTUS -->
+            <div class="radar-wrapper">
+                <iframe src="https://embed.windy.com/embed.html?type=radar&location=coordinates&metricRain=default&metricWind=default&zoom=8&overlay=radar&product=radar&level=surface&lat=62.721&lon=29.894&detailLat=62.721&detailLon=29.894&detail=false" 
+                        width="100%" height="100%" frameborder="0" style="border:none; display:block;"></iframe>
+            </div>
+
+            <div style="margin-top: 15px;">
+                <a href="https://www.ilmatieteenlaitos.fi/saa/kontiolahti/kontioniemi" target="_blank" style="display:inline-block; border:1px solid #00f0ff; color:#00f0ff; padding:6px 12px; border-radius:6px; text-decoration:none; font-size:12px; font-weight:bold;">📊 Ilmatieteen laitos</a>
+                <a href="https://www.ilmatieteenlaitos.fi/sade-ja-pilvitilat" target="_blank" style="display:inline-block; border:1px solid #00f0ff; color:#00f0ff; padding:6px 12px; border-radius:6px; text-decoration:none; font-size:12px; font-weight:bold; margin-left:5px;">📡 Sadetutka (FMI)</a>
+            </div>
         </div>
         
         <h2>Live-uutiset (AI-Newsroom)</h2>
@@ -150,6 +163,7 @@
             <button id="tab-nakkilista" onclick="switchSchedule('nakkilista')">📋 NAKKILISTA</button>
         </div>
         
+        <!-- FESTARIAIKATAULU-OSIO -->
         <div id="section-festari" class="schedule-section active">
             <div class="day-title">Perjantai 17.7.2026</div>
             <div class="grid-timetable">
@@ -312,7 +326,7 @@
             "You know, elämä on herkkää, mut rock'n'roll on ikuista. Älä stressaa liikaa, läbä läbä!",
             "Mä oon nähny kaiken, you know, New Yorkista Kontiolahteen. Täällä on parhaat vibat, man!",
             "Hei, don't worry about it! Seuraa vaan sun sydäntäs ja pidä hattu suorassa.",
-            "Tosi rokkari ei selittele. Me vaan tehään tää juttu, you know? Kыsy mitä vaan, mä oon rock-kuningas!",
+            "Tosi rokkari ei selittele. Me vaan tehään tää juttu, you know? Kysy mitä vaan, mä oon rock-kuningas!",
             "Luoja loi musiikin ja mä hoidan loput, läbä läbä. Make some noise!",
             "You know, mä oon asunu intiaanien kanssa ja soittanu maailman suurimmilla lavoilla, mut tää Tammalahti... tää on se real deal."
         ];
@@ -359,7 +373,6 @@
     const paattymisaika = new Date("July 19, 2026 23:59:59").getTime();
     const countdownElement = document.getElementById("rave-countdown");
 
-    // Höpö-uutispankki (Vain sallituilla henkilöillä)
     const uutiset = [
         { otsikko: "🚨 UUTISSALAMA: Opa bongattu surmahumalassa etuajassa!", kuvaus: "Silminnäkijähavaintojen mukaan Opa on aloittanut virallisen nesteytyksen jo ennen talkoiden alkamista. 'Hän vain mutisi jotain makkaroista', nimettömänä pysyvä festarivieras kertoo.", tunti: -12 },
         { otsikko: "🔮 KOHTALON KÄÄNNE: Agata otti komennon pihatalkoissa", kuvaus: "Agata on nimitetty talkoiden ylikomentajaksi. Raporttien mukaan haravat heiluvat Kontiolahdella sellaista vauhtia, että heikompaa hirvittää. Juha on määrätty välittömästi erikoistehtäviin.", tunti: -4 },
@@ -378,15 +391,11 @@
         const newsContainer = document.getElementById('news-container');
         if (!newsContainer) return;
 
-        // Vapautetaan uutisia sen mukaan, paljonko tunteja on kulunut alkamisesta
         let naytettavat = uutiset.filter(u => erotusTunteina >= u.tunti);
-        
-        // Jos festarit eivät ole vielä lähelläkään, näytetään aina vähintään kaksi ensimmäistä talkouutista (Opa ja Agata) kestona
         if(naytettavat.length < 2) {
             naytettavat = [uutiset[0], uutiset[1]];
         }
 
-        // Käännetään järjestys niin, että uusin uutinen on ylimpänä
         naytettavat.reverse();
 
         let html = "";
@@ -417,7 +426,6 @@
         }
     }
     
-    // Ajetaan kellon ja uutisten päivitykset rullamaan
     setInterval(updateCountdown, 1000); updateCountdown();
     setInterval(paivitaUutiset, 60000); paivitaUutiset();
 
