@@ -87,10 +87,8 @@
     const loput = ["Keisari", "Noita", "Ninja", "Mestari", "Ruhtinas", "Velho", "Kulkija", "Sankari", "Tietäjä", "Tuhooja"];
 
     if (!localStorage.getItem('festariNimiID')) {
-        const e = etuliitteet[Math.floor(Math.random() * etuliitteet.length)];
-        const k = keskiosat[Math.floor(Math.random() * keskiosat.length)];
-        const l = loput[Math.floor(Math.random() * loput.length)];
-        localStorage.setItem('festariNimiID', `${e} ${k} ${l}`);
+        const name = `${etuliitteet[Math.floor(Math.random()*10.0)]} ${keskiosat[Math.floor(Math.random()*10.0)]} ${loput[Math.floor(Math.random()*10.0)]}`;
+        localStorage.setItem('festariNimiID', name);
     }
     const myFestariNimi = localStorage.getItem('festariNimiID');
     document.getElementById('user-badge-display').innerText = `Kuvaajana: ${myFestariNimi}`;
@@ -112,7 +110,14 @@
                 video.srcObject = fallbackStream;
                 statusDiv.innerText = "Kamera valmis.";
             } catch(e) {
-                statusDiv.innerText = "Salli kamera puhelimen asetuksista.";
+                statusDiv.innerHTML = `
+                    <div style="background: rgba(255,0,0,0.1); border: 1px solid #ff007f; padding: 15px; border-radius: 8px; text-align: left; font-size: 13px; line-height: 1.5; margin-top: 10px;">
+                        <b style="color: #ff007f; font-size: 15px;">Kamera on estetty! Näin korjaat sen:</b><br><br>
+                        🍎 <b>iPhone (Safari):</b> Paina osoiterivin <b>"Aa"</b> -kuvaketta &rarr; Sivuston asetukset &rarr; Salli kamera.<br><br>
+                        🤖 <b>Android (Chrome):</b> Paina <b>lukon kuvaketta</b> osoiterivillä &rarr; Luvat &rarr; Salli kamera.<br><br>
+                        <i style="color: #aaa;">Päivitä tämä sivu uudelleen, kun olet antanut luvan!</i>
+                    </div>
+                `;
                 snapBtn.disabled = true;
             }
         }
@@ -144,6 +149,7 @@
                     aika: serverTimestamp()
                 });
 
+                localStorage.setItem('suoritus_kamera', 'true');
                 statusDiv.innerText = "Kuva tallennettu onnistuneesti!";
             } catch (error) {
                 statusDiv.innerText = "Lataus epäonnistui. Tarkista yhteys.";
