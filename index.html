@@ -7,207 +7,78 @@
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #0b0214; /* Syvä cyberpunk-yönvioletti */
-            color: #ffffff;
+            margin: 0; padding: 0;
+            background-color: #0b0214; color: #ffffff;
         }
-        
-        /* Joustava yläbanneri cyberpunk-kuvalla */
         header {
             position: relative;
             background-image: linear-gradient(to bottom, rgba(0,0,0,0) 80%, #0b0214 100%), url('tammalahti_banner.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center top;
-            width: 100%;
-            aspect-ratio: 16 / 7;
-            max-height: 500px;
+            background-size: contain; background-repeat: no-repeat; background-position: center top;
+            width: 100%; aspect-ratio: 16 / 7; max-height: 500px;
         }
-
-        /* Reaaliaikainen laskuri kuvan tekstin päällä */
         .countdown-overlay {
-            position: absolute;
-            top: 4.8%;
-            left: 17.8%;
-            color: #ff007f;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 2vw;
-            font-weight: bold;
-            text-shadow: 0 0 8px #ff007f, 0 0 20px #ff007f;
-            z-index: 10;
-            pointer-events: none;
-            letter-spacing: 1px;
-            background-color: #0b0214;
-            padding: 0 2px;
+            position: absolute; top: 4.8%; left: 17.8%; color: #ff007f;
+            font-family: 'Courier New', Courier, monospace; font-size: 2vw; font-weight: bold;
+            text-shadow: 0 0 8px #ff007f, 0 0 20px #ff007f; z-index: 10;
+            pointer-events: none; letter-spacing: 1px; background-color: #0b0214; padding: 0 2px;
         }
-
-        /* Pysyvä navigaatiopalkki pehmennetyillä neon-napeilla */
         nav {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            background-color: rgba(31, 31, 47, 0.95);
-            border-bottom: 2px solid #ff007f;
-            padding: 10px 5px;
-            overflow-x: auto;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
-            backdrop-filter: blur(5px);
-            gap: 8px;
+            position: -webkit-sticky; position: sticky; top: 0; z-index: 1000;
+            display: flex; justify-content: center; background-color: rgba(31, 31, 47, 0.95);
+            border-bottom: 2px solid #ff007f; padding: 10px 5px; overflow-x: auto;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); backdrop-filter: blur(5px); gap: 8px;
         }
-        
         nav button {
-            background: rgba(18, 18, 18, 0.6);
-            border: 1px solid rgba(255, 0, 127, 0.5);
-            color: #fff;
-            padding: 10px 18px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            font-weight: bold;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            background: rgba(18, 18, 18, 0.6); border: 1px solid rgba(255, 0, 127, 0.5);
+            color: #fff; padding: 10px 18px; cursor: pointer; font-size: 14px;
+            transition: all 0.3s ease; white-space: nowrap; font-weight: bold;
+            border-radius: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
-        
         nav button:hover, nav button.active {
-            background-color: #ff007f;
-            color: white;
-            border-color: #ff007f;
-            box-shadow: 0 0 12px #ff007f, 0 0 5px #00f0ff;
-            transform: translateY(-1px);
+            background-color: #ff007f; color: white; border-color: #ff007f;
+            box-shadow: 0 0 12px #ff007f, 0 0 5px #00f0ff; transform: translateY(-1px);
         }
-
-        /* Pääkehys / Sisällöt kehyksessä */
         .container {
-            padding: 20px;
-            max-width: 800px;
-            margin: 20px auto;
-            background: rgba(20, 10, 30, 0.6);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-            box-sizing: border-box;
-            padding-bottom: 60px;
+            padding: 20px; max-width: 800px; margin: 20px auto;
+            background: rgba(20, 10, 30, 0.6); border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 12px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            box-sizing: border-box; padding-bottom: 60px;
         }
-        
         .page { display: none; }
         .page.active { display: block; }
-        
-        h2 {
-            color: #00f0ff;
-            text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
-            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-            padding-bottom: 8px;
-            margin-top: 0;
-        }
-
-        .card {
-            background-color: #150d22;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border-left: 5px solid #00f0ff;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-        
+        h2 { color: #00f0ff; text-shadow: 0 0 8px rgba(0, 240, 255, 0.5); border-bottom: 1px solid rgba(0, 240, 255, 0.2); padding-bottom: 8px; margin-top: 0; }
+        .card { background-color: #150d22; padding: 20px; margin-bottom: 15px; border-radius: 8px; border-left: 5px solid #00f0ff; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
         .news-flash { border-left-color: #ffcc00; }
-        
-        /* Sää-korttien tyylit */
-        .weather-card {
-            border-left-color: #00f0ff;
-            background: linear-gradient(135deg, #150d22 0%, #0d1b2a 100%);
-        }
-        .weather-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            margin: 15px 0;
-        }
-        .weather-day {
-            background: rgba(0,0,0,0.3);
-            padding: 10px;
-            border-radius: 6px;
-            text-align: center;
-            border: 1px solid rgba(0,240,255,0.1);
-        }
-        .weather-day h4 { margin: 0 0 5px 0; color: #ff007f; }
-        .weather-btn {
-            display: inline-block;
-            background: transparent;
-            border: 1px solid #00f0ff;
-            color: #00f0ff;
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
-            transition: 0.2s;
-            margin-right: 10px;
-            margin-top: 5px;
-        }
-        .weather-btn:hover {
-            background: #00f0ff;
-            color: #0b0214;
-            box-shadow: 0 0 10px #00f0ff;
-        }
-
-        .pass {
-            background: linear-gradient(45deg, #ff007f, #7928ca);
-            padding: 30px;
-            text-align: center;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
+        .pass { background: linear-gradient(45deg, #ff007f, #7928ca); padding: 30px; text-align: center; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
         .festival-name { font-size: 26px; font-weight: bold; margin: 15px 0; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        
-        .map-wrapper {
-            width: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 2px solid #00f0ff;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-            background-color: #150d22;
-        }
+        .map-wrapper { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #00f0ff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); background-color: #150d22; }
         .map-wrapper img { width: 100%; height: auto; display: block; }
-
-        /* AIKATAULUKKO GRID */
         .schedule-controls { display: flex; gap: 10px; margin-bottom: 20px; }
-        .schedule-controls button {
-            flex: 1; background: #150d22; border: 1px solid #00f0ff; color: #00f0ff;
-            padding: 10px; font-weight: bold; cursor: pointer; border-radius: 8px; transition: 0.2s;
-        }
+        .schedule-controls button { flex: 1; background: #150d22; border: 1px solid #00f0ff; color: #00f0ff; padding: 10px; font-weight: bold; cursor: pointer; border-radius: 8px; transition: 0.2s; }
         .schedule-controls button.active { background: #00f0ff; color: #0b0214; box-shadow: 0 0 10px #00f0ff; }
-
         .schedule-section { display: none; }
         .schedule-section.active { display: block; }
-
         .day-title { color: #ff007f; font-weight: bold; margin: 20px 0 10px 0; text-transform: uppercase; letter-spacing: 1px; font-size: 16px; }
-
         .grid-timetable { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 20px; }
         .grid-row { display: grid; grid-template-columns: 80px 1fr 120px; background: #170e28; border: 1px solid rgba(255, 0, 127, 0.15); border-radius: 6px; overflow: hidden; }
         .grid-row.header-row { background: rgba(255, 0, 127, 0.2); border-color: #ff007f; font-weight: bold; color: #ff007f; }
         .grid-cell { padding: 10px; display: flex; align-items: center; font-size: 14px; }
         .grid-cell.time { background: rgba(0, 240, 255, 0.05); color: #00f0ff; font-family: monospace; justify-content: center; border-right: 1px solid rgba(0, 240, 255, 0.15); }
         .grid-cell.who { color: #ffcc00; font-style: italic; justify-content: flex-end; text-align: right; }
-
-        /* Galleria */
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
         .gallery-item { position: relative; height: 140px; border-radius: 8px; overflow: hidden; background-color: #333; border: 1px solid rgba(255,0,127,0.2); }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
         .gallery-item .author-tag { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(11, 2, 20, 0.85); color: #00f0ff; font-size: 10px; padding: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        
         .stamps-grid { display: flex; justify-content: space-around; margin: 20px 0; gap: 10px; }
         .stamp-box { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 10px; flex: 1; font-size: 12px; border: 2px dashed #aaa; text-align: center; }
         .stamp-box.checked { border-color: #00f0ff; background: rgba(0, 240, 255, 0.2); font-weight: bold; box-shadow: 0 0 8px #00f0ff; }
         .my-stamps { margin-top: 20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; text-align: left; }
         
+        /* Kojujen pikalinkit testaukseen nimen kanssa */
+        .koju-linkit { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
+        .koju-linkit a { background: #150d22; border: 1px dashed #00f0ff; color: #00f0ff; padding: 8px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; }
+        .koju-linkit a:hover { background: #00f0ff; color: #000; }
+
         @media (min-width: 1000px) { .countdown-overlay { font-size: 20px; top: 24px; left: 178px; } }
         @media (max-width: 500px) { .grid-row { grid-template-columns: 65px 1fr 90px; } .grid-cell { font-size: 12px; padding: 6px; } }
     </style>
@@ -228,36 +99,28 @@
 
 <div class="container">
 
-    <!-- ETUSIVU & UUTISET & SÄÄ -->
+    <!-- ETUSIVU -->
     <div id="koti" class="page active">
-        
-        <!-- SÄÄENNUSTEKORTTI (Kontiolahti / Kontioniemi) -->
-        <div class="card weather-card">
+        <div class="card" style="background: linear-gradient(135deg, #150d22 0%, #0d1b2a 100%); border-left-color: #00f0ff;">
             <h3>☀️ Tammalahtirock Säätila (Kontiolahti)</h3>
-            <p style="font-size: 13px; opacity: 0.8; margin-bottom: 10px;">Ennuste Lemmenpoluntien lähimmälle sääasemalle viikonlopuksi 16.7. – 19.7.2026:</p>
-            
-            <div class="weather-grid">
-                <div class="weather-day"><h4>To 16.7.</h4><p style="font-size:12px;margin:5px 0;">Talkoot</p><span style="color:#00f0ff;font-weight:bold;">Katso livenä</span></div>
-                <div class="weather-day"><h4>Pe 17.7.</h4><p style="font-size:12px;margin:5px 0;">Time to Rave</p><span style="color:#00f0ff;font-weight:bold;">Katso livenä</span></div>
-                <div class="weather-day"><h4>La 18.7.</h4><p style="font-size:12px;margin:5px 0;">Ilosaarirock</p><span style="color:#00f0ff;font-weight:bold;">Katso livenä</span></div>
-                <div class="weather-day"><h4>Su 19.7.</h4><p style="font-size:12px;margin:5px 0;">Brunssi</p><span style="color:#00f0ff;font-weight:bold;">Katso livenä</span></div>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin: 10px 0;">
+                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>To 16.7.</h4><span style="color:#00f0ff;font-size:12px;">Talkoot</span></div>
+                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>Pe 17.7.</h4><span style="color:#00f0ff;font-size:12px;">Rave</span></div>
+                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>La 18.7.</h4><span style="color:#00f0ff;font-size:12px;">Show</span></div>
+                <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; text-align:center;"><h4>Su 19.7.</h4><span style="color:#00f0ff;font-size:12px;">Brunssi</span></div>
             </div>
-
-            <!-- Ilmatieteen laitoksen suorat kohdistetut linkit -->
-            <a href="https://www.ilmatieteenlaitos.fi/saa/kontiolahti/kontioniemi" target="_blank" class="weather-btn">📊 Avaa 10vrk Ennuste</a>
-            <a href="https://www.ilmatieteenlaitos.fi/sade-ja-pilvitilat" target="_blank" class="weather-btn">📡 Avaa Livenä Sadetutka</a>
+            <a href="https://www.ilmatieteenlaitos.fi/saa/kontiolahti/kontioniemi" target="_blank" style="display:inline-block; border:1px solid #00f0ff; color:#00f0ff; padding:6px 12px; border-radius:6px; text-decoration:none; font-size:12px; font-weight:bold;">📊 Ennuste</a>
+            <a href="https://www.ilmatieteenlaitos.fi/sade-ja-pilvitilat" target="_blank" style="display:inline-block; border:1px solid #00f0ff; color:#00f0ff; padding:6px 12px; border-radius:6px; text-decoration:none; font-size:12px; font-weight:bold; margin-left:5px;">📡 Sadetutka</a>
         </div>
 
         <h2>Live-uutiset (AI-Newsroom)</h2>
         <div id="news-container">Päivitetään uutisia...</div>
     </div>
 
-    <!-- ALUEKARTTA -->
+    <!-- KARTTA -->
     <div id="kartta" class="page">
         <h2>Aluekartta</h2>
-        <div class="map-wrapper">
-            <img src="tammalahti_kartta.png" alt="Tammalahtirock 2026 Aluekartta">
-        </div>
+        <div class="map-wrapper"><img src="tammalahti_kartta.png" alt="Aluekartta"></div>
     </div>
     
     <!-- AIKATAULUT -->
@@ -267,79 +130,24 @@
             <button id="tab-festari" class="active" onclick="switchSchedule('festari')">🎸 FESTARIAIKATAULU</button>
             <button id="tab-nakkilista" onclick="switchSchedule('nakkilista')">📋 NAKKILISTA</button>
         </div>
-
         <div id="section-festari" class="schedule-section active">
             <div class="day-title">Perjantai 17.7.2026</div>
             <div class="grid-timetable">
-                <div class="grid-row header-row"><div class="grid-cell">Aika</div><div class="grid-cell">Ohjelma / Esiintyjä</div><div class="grid-cell" style="justify-content:flex-end;">Lava</div></div>
+                <div class="grid-row header-row"><div class="grid-cell">Aika</div><div class="grid-cell">Ohjelma</div><div class="grid-cell" style="justify-content:flex-end;">Lava</div></div>
                 <div class="grid-row"><div class="grid-cell time">14:00</div><div class="grid-cell">Portit auki & Alkulämmöt</div><div class="grid-cell who">Alue</div></div>
-                <div class="grid-row"><div class="grid-cell time">18:00</div><div class="grid-cell">Avajaisseremonia</div><div class="grid-cell who">Päälava</div></div>
                 <div class="grid-row"><div class="grid-cell time">21:00</div><div class="grid-cell">Tammalahti All Stars Live</div><div class="grid-cell who">Päälava</div></div>
             </div>
-            <div class="day-title">Lauantai 18.7.2026</div>
-            <div class="grid-timetable">
-                <div class="grid-row header-row"><div class="grid-cell">Aika</div><div class="grid-cell">Ohjelma / Esiintyjä</div><div class="grid-cell" style="justify-content:flex-end;">Lava</div></div>
-                <div class="grid-row"><div class="grid-cell time">12:00</div><div class="grid-cell">Päiväkäynnistys & DJ Kimalle</div><div class="grid-cell who">Teltta</div></div>
-                <div class="grid-row"><div class="grid-cell time">16:00</div><div class="grid-cell">Mysteeriartisti X</div><div class="grid-cell who">Telttalava</div></div>
-                <div class="grid-row"><div class="grid-cell time">22:00</div><div class="grid-cell">Pääesiintyjä & Finaalishow</div><div class="grid-cell who">Päälava</div></div>
-            </div>
         </div>
-
         <div id="section-nakkilista" class="schedule-section">
-            <div class="day-title">Etupeltoon (Valmistelut)</div>
-            <div class="grid-timetable">
-                <div class="grid-row header-row"><div class="grid-cell">Kesto</div><div class="grid-cell">Tehtävä</div><div class="grid-cell" style="justify-content:flex-end;">Vastuu</div></div>
-                <div class="grid-row"><div class="grid-cell time">1 h</div><div class="grid-cell">Makkara-ainesten tilaus</div><div class="grid-cell who">Opa</div></div>
-                <div class="grid-row"><div class="grid-cell time">4 h</div><div class="grid-cell">Ruokien tilaus</div><div class="grid-cell who">Opa</div></div>
-                <div class="grid-row"><div class="grid-cell time">1 h</div><div class="grid-cell">Jääkaapin haku?</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">1 h</div><div class="grid-cell">Yhteisalkoholihankinnat</div><div class="grid-cell who">Opa</div></div>
-            </div>
             <div class="day-title">Torstai 16.7.2026</div>
             <div class="grid-timetable">
-                <div class="grid-row"><div class="grid-cell time">16:00</div><div class="grid-cell">Makkara-ainesten nouto, Ylämylly (0.5h)</div><div class="grid-cell who">Opa</div></div>
-                <div class="grid-row"><div class="grid-cell time">17:00</div><div class="grid-cell">Ruokien nouto, Prisma Joensuu (0.5h)</div><div class="grid-cell who">Opa, Spede</div></div>
-                <div class="grid-row"><div class="grid-cell time">16:00-></div><div class="grid-cell">Makkaratalkoot (6h)</div><div class="grid-cell who">Opa, Spede</div></div>
-                <div class="grid-row"><div class="grid-cell time">Talkoot</div><div class="grid-cell">Pihatalkoot</div><div class="grid-cell who">Agata, Sauna</div></div>
-                <div class="grid-row"><div class="grid-cell time">Ruoka</div><div class="grid-cell">Talkooillallinen (1h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Grilli</div><div class="grid-cell">Grillimestari (1h)</div><div class="grid-cell who">-</div></div>
-            </div>
-            <div class="day-title">Perjantai 17.7.2026</div>
-            <div class="grid-timetable">
-                <div class="grid-row"><div class="grid-cell time">Lounas</div><div class="grid-cell">Lounaan teko (1h) & siivous (0.5h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Festarit</div><div class="grid-cell">Tammalahti-rock, koristelu yms. (2h)</div><div class="grid-cell who">Heini, Agata</div></div>
-                <div class="grid-row"><div class="grid-cell time">Festarit</div><div class="grid-cell">Tammalahti-rock, tekninen pystytys (2h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Show</div><div class="grid-cell">Ohjelmistosuunnittelu ja musiikillinen johto</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Grilli</div><div class="grid-cell">Grillimestari (1h)</div><div class="grid-cell who">Agata, Samu</div></div>
-                <div class="grid-row"><div class="grid-cell time">Päivällinen</div><div class="grid-cell">Päivällisen teko (1h) & siivous (0.5h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Sauna</div><div class="grid-cell">Sauna (1h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Bändi</div><div class="grid-cell">Tammalahti All Stars, yhtye</div><div class="grid-cell who">Agata</div></div>
-                <div class="grid-row"><div class="grid-cell time">Yleisö</div><div class="grid-cell">Tammalahti All Stars, yleisö</div><div class="grid-cell who">Heini, Samu</div></div>
-                <div class="grid-row"><div class="grid-cell time">Koju</div><div class="grid-cell">Lävistyskoju yms. alueohjelma</div><div class="grid-cell who">Heini</div></div>
-            </div>
-            <div class="day-title">Lauantai 18.7.2026</div>
-            <div class="grid-timetable">
-                <div class="grid-row"><div class="grid-cell time">Aamu</div><div class="grid-cell">Aamusauna (1h)</div><div class="grid-cell who">Agata, Samu</div></div>
-                <div class="grid-row"><div class="grid-cell time">Aamu</div><div class="grid-cell">Aamupalan teko (1h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Grilli</div><div class="grid-cell">Grillimestari (1h)</div><div class="grid-cell who">Agata, Samu</div></div>
-                <div class="grid-row"><div class="grid-cell time">Heti!</div><div class="grid-cell">Surmahumala heti aamusta (1h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Siivous</div><div class="grid-cell">Aamupalan siivous (1h)</div><div class="grid-cell who">Heini</div></div>
-                <div class="grid-row"><div class="grid-cell time">Yöruoka</div><div class="grid-cell">Yöruoka, teko (1h) & siivous (1h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Grilli</div><div class="grid-cell">Grillimestari (1h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Sauna</div><div class="grid-cell">Yösauna (1h)</div><div class="grid-cell who">-</div></div>
-            </div>
-            <div class="day-title">Sunnuntai 19.7.2026</div>
-            <div class="grid-timetable">
-                <div class="grid-row"><div class="grid-cell time">Aamu</div><div class="grid-cell">Aamusauna (1h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Brunssi</div><div class="grid-cell">Brunssin teko (1h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Grilli</div><div class="grid-cell">Grillimestari (1h)</div><div class="grid-cell who">-</div></div>
-                <div class="grid-row"><div class="grid-cell time">Siivous</div><div class="grid-cell">Brunssin siivous (1h)</div><div class="grid-cell who">Heini</div></div>
-                <div class="grid-row"><div class="grid-cell time">Loppu</div><div class="grid-cell">Loppusiivous (2h)</div><div class="grid-cell who">Evripadi</div></div>
-                <div class="grid-row"><div class="grid-cell time">Logist.</div><div class="grid-cell">Jääkaapin palautus (1h)</div><div class="grid-cell who">-</div></div>
+                <div class="grid-row"><div class="grid-cell time">16:00</div><div class="grid-cell">Makkara-ainesten nouto, Ylämylly</div><div class="grid-cell who">Opa</div></div>
+                <div class="grid-row"><div class="grid-cell time">17:00</div><div class="grid-cell">Ruokien nouto, Prisma Joensuu</div><div class="grid-cell who">Opa, Spede</div></div>
             </div>
         </div>
     </div>
 
-    <!-- DIGITAALINEN PASSI -->
+    <!-- FESTARIPASSI -->
     <div id="passi" class="page">
         <h2>Digitaalinen Festaripassi</h2>
         <div class="pass">
@@ -353,6 +161,12 @@
                 <div class="stamp-box" id="stamp-kohtalo">🔮 Kohtalon Koju</div>
             </div>
 
+            <!-- Testauslinkit, jotka vievät nimen automaattisesti eteenpäin kiertelemään estot -->
+            <div class="koju-linkit">
+                <a id="linkki-kamera" href="koju.html" target="_blank">Testaa Kameraa</a>
+                <a id="linkki-glitter" href="glitter.html" target="_blank">Testaa Glitteriä</a>
+            </div>
+
             <div class="my-stamps">
                 <h4 style="margin:0 0 10px 0;">Omat festarikuvasi:</h4>
                 <div class="gallery" id="my-photo-gallery"><p>Ei kuvia vielä.</p></div>
@@ -360,10 +174,9 @@
         </div>
     </div>
 
-    <!-- KUVAGALLERIA -->
+    <!-- KUVASEINÄ -->
     <div id="galleria" class="page">
         <h2>Kaikkien yhteinen kuvaseinä</h2>
-        <p>Festarikansan parhaat otokset livenä.</p>
         <div class="gallery" id="photo-gallery">Odotellaan otoksia...</div>
     </div>
 
@@ -371,40 +184,16 @@
 
 <script>
     function showPage(pageId) {
-        const pages = document.querySelectorAll('.page');
-        const buttons = document.querySelectorAll('nav button');
-        pages.forEach(page => page.classList.remove('active'));
-        buttons.forEach(btn => btn.classList.remove('active'));
-        
-        const targetPage = document.getElementById(pageId);
-        const targetBtn = document.getElementById('btn-' + pageId);
-        
-        if(targetPage && targetBtn) {
-            targetPage.classList.add('active');
-            targetBtn.classList.add('active');
-        }
-
-        if(pageId === 'passi') {
-            if(localStorage.getItem('suoritus_kamera')) {
-                const el = document.getElementById('stamp-kamera');
-                if(el) el.className = "stamp-box checked";
-            }
-            if(localStorage.getItem('suoritus_glitter')) {
-                const el = document.getElementById('stamp-glitter');
-                if(el) el.className = "stamp-box checked";
-            }
-            if(localStorage.getItem('suoritus_kohtalo')) {
-                const el = document.getElementById('stamp-kohtalo');
-                if(el) el.className = "stamp-box checked";
-            }
-        }
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        if(document.getElementById(pageId)) document.getElementById(pageId).classList.add('active');
+        if(document.getElementById('btn-' + pageId)) document.getElementById('btn-' + pageId).classList.add('active');
     }
     window.showPage = showPage;
 
     function switchSchedule(type) {
         document.querySelectorAll('.schedule-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.schedule-controls button').forEach(b => b.classList.remove('active'));
-        
         document.getElementById('section-' + type).classList.add('active');
         document.getElementById('tab-' + type).classList.add('active');
     }
@@ -427,117 +216,86 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Nimigeneraattori
     const etuliitteet = ["DJ", "Kapteeni", "Kuningas", "Lady", "Herra", "Tohtori", "Iso", "Pikku", "Ylipäällikkö", "Metsän"];
     const keskiosat = ["Glitter", "Crocs", "Tölkki", "Sauna", "Makkara", "Disco", "Hyttynen", "Nuotio", "Basso", "Kimallus"];
     const loput = ["Keisari", "Noita", "Ninja", "Mestari", "Ruhtinas", "Velho", "Kulkija", "Sankari", "Tietäjä", "Tuhooja"];
     
     if (!localStorage.getItem('festariNimiID')) {
-        const name = `${etuliitteet[Math.floor(Math.random()*10.0)]} ${keskiosat[Math.floor(Math.random()*10.0)]} ${loput[Math.floor(Math.random()*10.0)]}`;
+        const name = `${etuliitteet[Math.floor(Math.random()*10)]} ${keskiosat[Math.floor(Math.random()*10)]} ${loput[Math.floor(Math.random()*10)]}`;
         localStorage.setItem('festariNimiID', name);
     }
     const myFestariNimi = localStorage.getItem('festariNimiID');
-    const nameDisplay = document.getElementById('festival-name-display');
-    if(nameDisplay) nameDisplay.innerText = myFestariNimi;
+    document.getElementById('festival-name-display').innerText = myFestariNimi;
 
-    // LASKURI
+    // Päivitetään pikalinkit sisältämään festarinimi urliin synkronointia varten
+    document.getElementById('linkki-kamera').href = `koju.html?nimi=${encodeURIComponent(myFestariNimi)}`;
+    document.getElementById('linkki-glitter').href = `glitter.html?nimi=${encodeURIComponent(myFestariNimi)}`;
+
+    // Kello
     const alkamisaika = new Date("July 17, 2026 14:00:00").getTime();
     const paattymisaika = new Date("July 19, 2026 23:59:59").getTime();
     const countdownElement = document.getElementById("rave-countdown");
 
     function updateCountdown() {
-        if(!countdownElement) return;
         const nyt = new Date().getTime();
-        
         if (nyt < alkamisaika) {
             const erotus = alkamisaika - nyt;
             const paivat = Math.floor(erotus / (1000 * 60 * 60 * 24));
             const tunnit = Math.floor((erotus % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minuutit = Math.floor((erotus % (1000 * 60 * 60)) / (1000 * 60));
             const sekunnit = Math.floor((erotus % (1000 * 60)) / 1000);
-            
-            const fTunnit = String(tunnit + (paivat * 24)).padStart(2, '0');
-            const fMinuutit = String(minuutit).padStart(2, '0');
-            const fSekunnit = String(sekunnit).padStart(2, '0');
-            
-            countdownElement.innerText = `${fTunnit}:${fMinuutit}:${fSekunnit}`;
+            countdownElement.innerText = `${String(tunnit + (paivat * 24)).padStart(2,'0')}:${String(minuutit).padStart(2,'0')}:${String(sekunnit).padStart(2,'0')}`;
         } else if (nyt >= alkamisaika && nyt <= paattymisaika) {
             countdownElement.innerText = "⚡LIVE⚡";
         } else {
             countdownElement.innerText = "OFFLN";
         }
     }
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+    setInterval(updateCountdown, 1000); updateCountdown();
 
-    // AI-FEIKKIUUTISET
-    const tekoalyUutiset = [
-        { tunti: 14, otsikko: "🚨 Porttikaaos peruttu!", teksti: "Portit avattiin klo 14:00. Ensimmäinen vieras yritti tuoda festarialueelle lemmikkisammakkoa, sammakko käännytettiin takaisin." },
-        { tunti: 16, otsikko: "⚠️ Hälytys ruokakojulla", teksti: "Makkaranpaistopisteen ylle kerääntyi ennätysmäinen 4000 hyttysen pilvi. Festarikansaa pyydetään tanssimaan nopeammin hyttysten hämäämiseksi." },
-        { tunti: 18, otsikko: "⭐ VIP-alueen kuulumisia", teksti: "Tuntematon rokkari on juuri bongattu jonottamassa bajamajaan VIP-passi väärinpäin kaulassa. Huhut kertovat kyseessä olleen salep-julkkis." },
-        { tunti: 20, otsikko: "🔥 Päälavan mysteeri", teksti: "Bändin basistin basso katosi. Se löytyi 10 minuuttia myöhemmin festarialueen saunan lauteilta lämmittelemästä." },
-        { tunti: 22, otsikko: "🌌 Glitter-kriisi!", teksti: "Festarialueen glittervarastot uhkaavat loppua kesken. Ylipäälliköt kehoittavat säästeliääseen kimaltelemiseen yön pikkutunneilla." }
-    ];
+    // Uutiset
+    const newsContainer = document.getElementById('news-container');
+    if(newsContainer) newsContainer.innerHTML = `<div class="card news-flash"><h3>🚨 Live-linjat auki!</h3><p>Tietokantayhteys muodostettu onnistuneesti nimelle: <b>${myFestariNimi}</b>. Ota testikuva alta!</p></div>`;
 
-    function paivitaUutiset() {
-        const newsContainer = document.getElementById('news-container');
-        if(!newsContainer) return;
-        newsContainer.innerHTML = "";
-        const nykyinenTunti = 23; 
-
-        tekoalyUutiset.forEach(u => {
-            if (nykyinenTunti >= u.tunti) {
-                const card = document.createElement('div');
-                card.className = 'card news-flash';
-                card.innerHTML = `<h3>${u.otsikko}</h3><p>${u.teksti}</p>`;
-                newsContainer.appendChild(card);
-            }
-        });
-    }
-    paivitaUutiset();
-
-    // Kuvagalleria livenä Firebasesta
-    const galleryContainer = document.getElementById('photo-gallery');
-    const myGalleryContainer = document.getElementById('my-photo-gallery');
-
+    // Reaaliaikainen seuranta ja leimojen haku nimellä
     onSnapshot(query(collection(db, "kuvat"), orderBy("aika", "desc")), (snapshot) => {
-        if(galleryContainer) galleryContainer.innerHTML = ""; 
+        const galleryContainer = document.getElementById('photo-gallery');
+        const myGalleryContainer = document.getElementById('my-photo-gallery');
+        if(galleryContainer) galleryContainer.innerHTML = "";
         if(myGalleryContainer) myGalleryContainer.innerHTML = "";
         let hasMyPhotos = false;
 
         snapshot.forEach((doc) => {
             const data = doc.data();
             if (data.kuva_url) {
-                const item = document.createElement('div');
-                item.className = 'gallery-item';
+                // Kaikkien kuvat
+                const item = document.createElement('div'); item.className = 'gallery-item';
                 const img = document.createElement('img'); img.src = data.kuva_url;
                 const tag = document.createElement('div'); tag.className = 'author-tag';
-                tag.innerText = (data.tyyppi === 'glitter' ? "✨ " : "📸 ") + (data.tekija_nimi || "Mysteeri Rokkari");
+                tag.innerText = (data.tyyppi === 'glitter' ? "✨ " : "📸 ") + (data.tekija_nimi || "Rokkari");
                 item.appendChild(img); item.appendChild(tag);
                 if(galleryContainer) galleryContainer.appendChild(item);
 
+                // Omat kuvat (synkronoitu tarkalla nimellä)
                 if (data.tekija_nimi === myFestariNimi) {
                     hasMyPhotos = true;
                     if (data.tyyppi === 'glitter') {
                         localStorage.setItem('suoritus_glitter', 'true');
+                        if(document.getElementById('stamp-glitter')) document.getElementById('stamp-glitter').className = "stamp-box checked";
                     } else {
                         localStorage.setItem('suoritus_kamera', 'true');
+                        if(document.getElementById('stamp-kamera')) document.getElementById('stamp-kamera').className = "stamp-box checked";
                     }
                     
                     const myItem = document.createElement('div'); myItem.className = 'gallery-item';
                     const myImg = document.createElement('img'); myImg.src = data.kuva_url;
-                    myItem.appendChild(myImg); 
+                    myItem.appendChild(myImg);
                     if(myGalleryContainer) myGalleryContainer.appendChild(myItem);
                 }
             }
         });
-        
-        if (galleryContainer && galleryContainer.innerHTML === "") galleryContainer.innerHTML = "<p>Ei kuvia.</p>";
-        if (myGalleryContainer && !hasMyPhotos) myGalleryContainer.innerHTML = "<p>Ei omia kuvia vielä.</p>";
-        
-        if(localStorage.getItem('suoritus_kamera')) {
-            const el = document.getElementById('stamp-kamera');
-            if(el) el.className = "stamp-box checked";
-        }
+        if(myGalleryContainer && !hasMyPhotos) myGalleryContainer.innerHTML = "<p>Ei omia kuvia vielä. Käytä testilinkkejä ylhäältä!</p>";
     });
 </script>
 </body>
